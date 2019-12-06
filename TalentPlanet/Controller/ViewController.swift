@@ -9,12 +9,15 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+    // MARK: - Variables
+    
+    // MARK: - Init
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
     }
-
+    
+    // MARK: - Functions
 
 }
 

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>369212968644-9m2ugg076ab02k14tk32mr82fsc7h35t.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.369212968644-9m2ugg076ab02k14tk32mr82fsc7h35t</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDUVZRHP3dKXM0KGvHbCV4oXqsTZUVyufU</string>
+	<key>GCM_SENDER_ID</key>
+	<string>369212968644</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>accepted.TalentPlanet</string>
+	<key>PROJECT_ID</key>
+	<string>accepted-talent-planet</string>
+	<key>STORAGE_BUCKET</key>
+	<string>accepted-talent-planet.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:369212968644:ios:24d57e97857863f0450391</string>
+	<key>DATABASE_URL</key>
+	<string>https://accepted-talent-planet.firebaseio.com</string>
+</dict>
+</plist>
