@@ -860,7 +860,7 @@
                                 <rect key="frame" x="0.0" y="44" width="375" height="574"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="80" id="P63-Ie-25u" customClass="MessengerListCell" customModule="TalentPlanet" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="MessengerListCell" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MessengerListCell" rowHeight="80" id="P63-Ie-25u" customClass="MessengerListCell" customModule="TalentPlanet" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="375" height="80"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="P63-Ie-25u" id="ZfO-Xe-mqa">
@@ -946,7 +946,7 @@
                                 <rect key="frame" x="0.0" y="44" width="375" height="553"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="47" id="MsH-qA-d5d" customClass="MessengerDateCell" customModule="TalentPlanet" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="MessengerDateCell" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MessengerDateCell" rowHeight="47" id="MsH-qA-d5d" customClass="MessengerDateCell" customModule="TalentPlanet" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="375" height="47"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="MsH-qA-d5d" id="aPh-gF-ANi">
@@ -989,7 +989,7 @@
                                             <outlet property="lbDate" destination="zEb-xD-lw7" id="yKJ-2H-TXd"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="140" id="tOH-2l-G8n" customClass="MessengerRecvCell" customModule="TalentPlanet" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="MessengerRecvCell" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MessengerRecvCell" rowHeight="140" id="tOH-2l-G8n" customClass="MessengerRecvCell" customModule="TalentPlanet" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="75" width="375" height="140"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="tOH-2l-G8n" id="xQR-1Y-cvu">
@@ -1055,7 +1055,7 @@
                                             <outlet property="lbName" destination="tyU-nA-3LQ" id="Eqz-RF-pJI"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="100" id="7sL-Ou-eZH" customClass="MessengerSendCell" customModule="TalentPlanet" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="MessengerSendCell" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MessengerSendCell" rowHeight="100" id="7sL-Ou-eZH" customClass="MessengerSendCell" customModule="TalentPlanet" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="215" width="375" height="100"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="7sL-Ou-eZH" id="bn8-Sw-5QF">
@@ -1147,7 +1147,9 @@
                     </view>
                     <navigationItem key="navigationItem" id="jDf-NJ-hww"/>
                     <connections>
+                        <outlet property="ivSend" destination="1hj-Mn-Fu1" id="f0k-OD-mt3"/>
                         <outlet property="messengerTableView" destination="Jas-9U-zMe" id="YMB-5e-cJV"/>
+                        <outlet property="tfMessage" destination="uET-GV-Q1W" id="1hn-aQ-yEt"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2wP-xj-xuP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -1455,10 +1457,9 @@
                                             <constraints>
                                                 <constraint firstItem="xvZ-hQ-hLV" firstAttribute="centerY" secondItem="1qg-f3-J0e" secondAttribute="centerY" id="1JL-iA-Idp"/>
                                                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="xvZ-hQ-hLV" secondAttribute="trailing" constant="20" symbolic="YES" id="G8b-Ql-06z"/>
-                                                <constraint firstItem="1qg-f3-J0e" firstAttribute="leading" secondItem="yXS-hV-jkU" secondAttribute="leading" constant="20" id="Pjk-HD-l9e"/>
-                                                <constraint firstItem="xvZ-hQ-hLV" firstAttribute="leading" secondItem="1qg-f3-J0e" secondAttribute="trailing" constant="30" id="fs5-Qe-A9y"/>
-                                                <constraint firstAttribute="bottom" secondItem="1qg-f3-J0e" secondAttribute="bottom" constant="10" id="sBq-ed-5xn"/>
-                                                <constraint firstItem="1qg-f3-J0e" firstAttribute="top" secondItem="yXS-hV-jkU" secondAttribute="top" constant="10" id="ujZ-nb-1ne"/>
+                                                <constraint firstItem="xvZ-hQ-hLV" firstAttribute="leading" secondItem="1qg-f3-J0e" secondAttribute="trailing" constant="30" id="fkB-W7-uCd"/>
+                                                <constraint firstItem="1qg-f3-J0e" firstAttribute="leading" secondItem="yXS-hV-jkU" secondAttribute="leading" constant="20" id="ixa-5N-aaP"/>
+                                                <constraint firstItem="1qg-f3-J0e" firstAttribute="centerY" secondItem="yXS-hV-jkU" secondAttribute="centerY" id="ocg-Se-job"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
@@ -1514,6 +1515,9 @@
                                         <state key="normal" title="Teacher 등록">
                                             <color key="titleColor" red="0.15686274510000001" green="0.21176470589999999" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
+                                        <connections>
+                                            <action selector="clickTeacherBtn:" destination="djL-ah-uyh" eventType="touchUpInside" id="jh2-HO-kJX"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xuQ-c7-nFA">
                                         <rect key="frame" x="187.5" y="50" width="187.5" height="50"/>
@@ -1524,6 +1528,9 @@
                                         <state key="normal" title="Student 등록">
                                             <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
+                                        <connections>
+                                            <action selector="clickStudentBtn:" destination="djL-ah-uyh" eventType="touchUpInside" id="61i-0Q-m3X"/>
+                                        </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Talent Category" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wIF-zY-pgV">
                                         <rect key="frame" x="8" y="14" width="121" height="22"/>
@@ -1666,7 +1673,10 @@
                     <navigationItem key="navigationItem" id="IkP-lA-hpY"/>
                     <size key="freeformSize" width="375" height="860"/>
                     <connections>
+                        <outlet property="btnStudent" destination="xuQ-c7-nFA" id="fsB-oT-9kR"/>
+                        <outlet property="btnTeacher" destination="a2n-w4-sGa" id="gIy-OM-cte"/>
                         <outlet property="collectionView" destination="JyI-Xi-TzW" id="gOM-nS-cYH"/>
+                        <outlet property="headerView" destination="an7-e1-UEn" id="f8P-VH-HOU"/>
                         <segue destination="yIf-0M-EWG" kind="show" identifier="segueProfile" id="h5q-Ha-gqz"/>
                         <segue destination="xC5-nH-Xdo" kind="show" identifier="segueNewProfile" id="mvQ-Bl-FRZ"/>
                     </connections>
@@ -1819,6 +1829,7 @@
                     <navigationItem key="navigationItem" id="ynl-Qn-c70"/>
                     <connections>
                         <outlet property="ivAdd" destination="iD1-og-esY" id="ZR9-hX-SR4"/>
+                        <outlet property="ivAddBackground" destination="CYU-OS-zYX" id="ywa-sc-OYP"/>
                         <outlet property="ivGender" destination="BIf-aM-e4u" id="Tdw-Am-r4a"/>
                         <outlet property="ivPublicCheck" destination="YdA-N0-Hyj" id="nqc-35-h6F"/>
                         <outlet property="ivUser" destination="PSL-kS-guJ" id="Egi-4j-k4C"/>
@@ -1826,7 +1837,8 @@
                         <outlet property="lbBirth" destination="AdD-6x-e5K" id="okt-LW-3HJ"/>
                         <outlet property="lbIntroduction" destination="D5g-F0-HTZ" id="7Sm-wt-Rcf"/>
                         <outlet property="lbName" destination="hJT-Je-brg" id="Rbz-jc-wsf"/>
-                        <outlet property="userInfoVIew" destination="biE-Ge-tO6" id="DDs-b2-l3c"/>
+                        <outlet property="lbTitle" destination="VZA-oL-1eH" id="bCD-xV-dPt"/>
+                        <outlet property="userInfoView" destination="biE-Ge-tO6" id="8m6-c1-9Mg"/>
                         <segue destination="y4u-Uq-hua" kind="show" identifier="segueMapView" id="I4u-OB-FYH"/>
                     </connections>
                 </viewController>
@@ -2103,7 +2115,7 @@
                                         </constraints>
                                     </imageView>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_mappointer.png" translatesAutoresizingMaskIntoConstraints="NO" id="mRe-ry-vEZ">
-                                        <rect key="frame" x="111" y="111.5" width="25" height="66"/>
+                                        <rect key="frame" x="111" y="128" width="25" height="33"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="25" id="l9Q-0D-5HW"/>
                                         </constraints>
@@ -2127,9 +2139,24 @@
                                             <constraint firstAttribute="height" constant="25" id="ebu-MI-SeV"/>
                                         </constraints>
                                     </imageView>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_message.png" translatesAutoresizingMaskIntoConstraints="NO" id="oIy-Zg-R6d">
+                                        <rect key="frame" x="20" y="5" width="50" height="50"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="50" id="14J-Ak-gDk"/>
+                                            <constraint firstAttribute="height" constant="50" id="bRu-Wk-zQV"/>
+                                        </constraints>
+                                    </imageView>
+                                    <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Ahz-Np-HRB">
+                                        <rect key="frame" x="305" y="5" width="50" height="50"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="50" id="4Y1-0j-60A"/>
+                                            <constraint firstAttribute="height" constant="50" id="ObT-d6-4xN"/>
+                                        </constraints>
+                                    </imageView>
                                 </subviews>
                                 <color key="backgroundColor" red="0.15686274510000001" green="0.21176470589999999" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
+                                    <constraint firstItem="Ahz-Np-HRB" firstAttribute="top" secondItem="Dzn-75-go1" secondAttribute="top" constant="5" id="06n-pr-BTE"/>
                                     <constraint firstItem="Mp5-r8-mXQ" firstAttribute="leading" secondItem="OlZ-zm-WwQ" secondAttribute="trailing" constant="8" id="Akm-V0-DBG"/>
                                     <constraint firstItem="Ik5-ak-yXo" firstAttribute="centerX" secondItem="Dzn-75-go1" secondAttribute="centerX" id="CRf-jL-1Dq"/>
                                     <constraint firstItem="vPZ-1q-Zln" firstAttribute="top" secondItem="5Xh-EP-681" secondAttribute="bottom" constant="8" id="Hnt-7O-Oel"/>
@@ -2137,12 +2164,15 @@
                                     <constraint firstItem="vPZ-1q-Zln" firstAttribute="centerX" secondItem="Dzn-75-go1" secondAttribute="centerX" id="JLF-aB-r1n"/>
                                     <constraint firstItem="vPZ-1q-Zln" firstAttribute="width" secondItem="5Xh-EP-681" secondAttribute="width" id="K0u-yF-MIr"/>
                                     <constraint firstItem="GLB-22-wi8" firstAttribute="centerX" secondItem="Dzn-75-go1" secondAttribute="centerX" id="KYF-i2-Ogv"/>
+                                    <constraint firstItem="oIy-Zg-R6d" firstAttribute="top" secondItem="Dzn-75-go1" secondAttribute="top" constant="5" id="ONQ-fw-wEc"/>
+                                    <constraint firstAttribute="trailing" secondItem="Ahz-Np-HRB" secondAttribute="trailing" constant="20" id="ONc-ha-qGo"/>
                                     <constraint firstItem="Mp5-r8-mXQ" firstAttribute="centerX" secondItem="Dzn-75-go1" secondAttribute="centerX" id="Otk-9P-6zZ"/>
                                     <constraint firstItem="Mp5-r8-mXQ" firstAttribute="top" secondItem="Ik5-ak-yXo" secondAttribute="bottom" constant="8" id="Sbj-Lx-F0Y"/>
                                     <constraint firstItem="OlZ-zm-WwQ" firstAttribute="centerY" secondItem="Mp5-r8-mXQ" secondAttribute="centerY" id="T9i-sG-2Wg"/>
                                     <constraint firstItem="Pbt-Kc-kp4" firstAttribute="top" secondItem="Mp5-r8-mXQ" secondAttribute="bottom" constant="20" id="Tyt-Wj-1LZ"/>
                                     <constraint firstItem="GLB-22-wi8" firstAttribute="leading" secondItem="Dzn-75-go1" secondAttribute="leading" constant="50" id="Upe-9i-GgR"/>
                                     <constraint firstItem="GLB-22-wi8" firstAttribute="top" secondItem="Pbt-Kc-kp4" secondAttribute="bottom" constant="20" id="b36-q7-yUQ"/>
+                                    <constraint firstItem="oIy-Zg-R6d" firstAttribute="leading" secondItem="Dzn-75-go1" secondAttribute="leading" constant="20" id="c7x-S7-IgN"/>
                                     <constraint firstAttribute="height" constant="250" id="dnA-FL-0ES"/>
                                     <constraint firstItem="mRe-ry-vEZ" firstAttribute="centerY" secondItem="Pbt-Kc-kp4" secondAttribute="centerY" id="feT-Fd-DBS"/>
                                     <constraint firstItem="Ik5-ak-yXo" firstAttribute="top" secondItem="vPZ-1q-Zln" secondAttribute="bottom" constant="4" id="gp0-7O-0Be"/>
@@ -2194,6 +2224,8 @@
                     <connections>
                         <outlet property="ivDelete" destination="pTK-hp-L3M" id="iLl-iR-Kos"/>
                         <outlet property="ivGender" destination="OlZ-zm-WwQ" id="s6a-fU-yca"/>
+                        <outlet property="ivMap" destination="mRe-ry-vEZ" id="pAX-99-gbc"/>
+                        <outlet property="ivMessage" destination="oIy-Zg-R6d" id="QCb-KZ-ad8"/>
                         <outlet property="ivModify" destination="em0-0i-Ml5" id="PPr-kJ-pN0"/>
                         <outlet property="ivProfile" destination="xnl-ch-lbJ" id="EC6-Jf-dqV"/>
                         <outlet property="ivPublicCheck" destination="2kl-87-RBa" id="YH5-tu-h72"/>
@@ -2207,6 +2239,7 @@
                         <outlet property="userInfoView" destination="Dzn-75-go1" id="qjE-gj-187"/>
                         <segue destination="djL-ah-uyh" kind="show" identifier="segueTalentRegist" id="Sb9-Pm-Bju"/>
                         <segue destination="y4u-Uq-hua" kind="show" identifier="segueMapView" id="F7I-Oc-FWu"/>
+                        <segue destination="mUf-kT-KmX" kind="show" identifier="segueMessenger" id="2mG-mJ-3vn"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vWu-IH-MH6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -2563,7 +2596,7 @@
                                                                     </label>
                                                                 </subviews>
                                                             </stackView>
-                                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="w44-vG-t6J" userLabel="sport">
+                                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="w44-vG-t6J" userLabel="sports">
                                                                 <rect key="frame" x="225" y="0.0" width="75" height="76"/>
                                                                 <subviews>
                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kFA-tm-b4v">
@@ -2957,6 +2990,8 @@
                                                     <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Vvn-Eu-Dov" secondAttribute="trailing" constant="20" symbolic="YES" id="Cbe-y5-Te7"/>
                                                     <constraint firstItem="dgY-cm-pPd" firstAttribute="top" secondItem="8OH-MU-Ftc" secondAttribute="bottom" constant="8" id="E2f-qN-kRw"/>
                                                     <constraint firstItem="N24-xN-8LN" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="8OH-MU-Ftc" secondAttribute="trailing" constant="8" symbolic="YES" id="Iq2-aU-dVz"/>
+                                                    <constraint firstItem="dgY-cm-pPd" firstAttribute="leading" secondItem="8OH-MU-Ftc" secondAttribute="leading" id="LJo-pE-ZUX"/>
+                                                    <constraint firstItem="Vvn-Eu-Dov" firstAttribute="leading" secondItem="dgY-cm-pPd" secondAttribute="leading" id="U2J-N1-Adx"/>
                                                     <constraint firstItem="Vvn-Eu-Dov" firstAttribute="top" secondItem="dgY-cm-pPd" secondAttribute="bottom" constant="8" id="Uau-8A-4QB"/>
                                                     <constraint firstItem="N24-xN-8LN" firstAttribute="top" secondItem="uVG-dM-1qB" secondAttribute="top" constant="25" id="X1j-rG-fdy"/>
                                                     <constraint firstItem="N24-xN-8LN" firstAttribute="leading" secondItem="dgY-cm-pPd" secondAttribute="trailing" constant="103.5" id="aSi-l7-8nk"/>
@@ -2966,7 +3001,7 @@
                                                     <constraint firstAttribute="bottom" secondItem="N24-xN-8LN" secondAttribute="bottom" constant="25" id="lQF-Ei-T9o"/>
                                                     <constraint firstAttribute="trailing" secondItem="N24-xN-8LN" secondAttribute="trailing" constant="35" id="lcE-rm-DJi"/>
                                                     <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Vvn-Eu-Dov" secondAttribute="trailing" constant="20" symbolic="YES" id="m9S-Qy-UiP"/>
-                                                    <constraint firstItem="dgY-cm-pPd" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="uVG-dM-1qB" secondAttribute="leading" symbolic="YES" id="pt0-0P-8pS"/>
+                                                    <constraint firstItem="dgY-cm-pPd" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="uVG-dM-1qB" secondAttribute="leading" constant="20" symbolic="YES" id="pt0-0P-8pS"/>
                                                     <constraint firstItem="Vvn-Eu-Dov" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="uVG-dM-1qB" secondAttribute="leading" constant="20" symbolic="YES" id="wsm-TK-ToL"/>
                                                 </constraints>
                                             </view>
@@ -3037,9 +3072,13 @@
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <size key="freeformSize" width="375" height="749"/>
                     <connections>
+                        <outlet property="addCateView" destination="uVG-dM-1qB" id="hGq-Le-tcC"/>
+                        <outlet property="btnBanner" destination="TwQ-bE-g3B" id="beZ-kf-bN2"/>
                         <outlet property="btnTitle" destination="fCP-qm-vhp" id="sMN-uG-yBf"/>
                         <outlet property="ivAddCate" destination="N24-xN-8LN" id="x39-Gq-x3k"/>
                         <outlet property="ivSearch" destination="tNE-7X-W9z" id="03U-QW-Rlw"/>
+                        <outlet property="lbBannerBottom" destination="DWf-0H-2kl" id="RLQ-9M-Aoo"/>
+                        <outlet property="lbBannerTop" destination="Z2j-Ki-KLx" id="l3p-cf-a5p"/>
                         <outlet property="naviItem" destination="B7N-ql-6UA" id="XPr-mO-1Mk"/>
                         <outlet property="svBeauty" destination="x7F-9b-WVl" id="IKe-1L-kyJ"/>
                         <outlet property="svCamera" destination="2PY-AR-ssq" id="xVC-u2-mUf"/>
@@ -3052,7 +3091,7 @@
                         <outlet property="svMoney" destination="qMV-Ry-6YG" id="EuW-rV-fDu"/>
                         <outlet property="svMusic" destination="jEM-9h-ncS" id="wqi-Of-5GT"/>
                         <outlet property="svSearch" destination="1vm-pM-cg4" id="wJk-4b-xxE"/>
-                        <outlet property="svSport" destination="w44-vG-t6J" id="Q2n-tn-kTi"/>
+                        <outlet property="svSports" destination="w44-vG-t6J" id="UgW-04-lz6"/>
                         <outlet property="svStudy" destination="QC9-M9-0B7" id="OAz-gn-a7d"/>
                         <outlet property="svTravel" destination="nXr-4g-AMn" id="M1R-y7-Qe4"/>
                         <outlet property="svVolunteer" destination="Mt3-tt-f0R" id="Fbi-yg-bVT"/>
@@ -3064,10 +3103,10 @@
             </objects>
             <point key="canvasLocation" x="2749.5999999999999" y="-636.4317841079461"/>
         </scene>
-        <!--Tab Bar Controller-->
+        <!--Base Tab Bar Controller-->
         <scene sceneID="1Wc-Ee-Wgl">
             <objects>
-                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="Fmy-kQ-y9s" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="BaseTabBarController" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Fmy-kQ-y9s" customClass="BaseTabBarController" customModule="TalentPlanet" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="M5a-J1-F6m"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="vFp-EU-1sd">
@@ -3077,7 +3116,7 @@
                     </tabBar>
                     <connections>
                         <segue destination="qoC-Oi-8Rj" kind="relationship" relationship="viewControllers" id="mWU-8F-6DK"/>
-                        <segue destination="6M8-FW-Ff8" kind="relationship" relationship="viewControllers" id="bgJ-j2-naS"/>
+                        <segue destination="6M8-FW-Ff8" kind="relationship" relationship="viewControllers" destinationCreationSelector="segueMenu" id="bgJ-j2-naS"/>
                         <segue destination="XRB-4c-AZp" kind="relationship" relationship="viewControllers" id="U7T-TN-Ic8"/>
                         <segue destination="viB-K4-QeJ" kind="relationship" relationship="viewControllers" id="XKS-0v-zmg"/>
                     </connections>
@@ -3279,6 +3318,7 @@
         <image name="icon_living.png" width="150" height="150"/>
         <image name="icon_male.png" width="90" height="90"/>
         <image name="icon_mappointer.png" width="32" height="33"/>
+        <image name="icon_message.png" width="288" height="288"/>
         <image name="icon_money.png" width="150" height="150"/>
         <image name="icon_music.png" width="150" height="150"/>
         <image name="icon_search_teacher.png" width="150" height="150"/>
@@ -3304,6 +3344,7 @@
     <inferredMetricsTieBreakers>
         <segue reference="F7I-Oc-FWu"/>
         <segue reference="ZXs-KU-6Fo"/>
-        <segue reference="yip-oA-W5Z"/>
+        <segue reference="Sb9-Pm-Bju"/>
+        <segue reference="1pv-Yv-Qbk"/>
     </inferredMetricsTieBreakers>
 </document>

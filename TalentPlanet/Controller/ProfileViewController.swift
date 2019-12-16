@@ -17,6 +17,8 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     @IBOutlet var ivProfile: UIImageView!
     @IBOutlet var ivModify: UIImageView!
     @IBOutlet var ivDelete: UIImageView!
+    @IBOutlet var ivMessage: UIImageView!
+    @IBOutlet var ivMap: UIImageView!
     
     // 재능 관련 변수
     @IBOutlet var lbTag: UILabel!
@@ -31,6 +33,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     @IBOutlet var lbAddress: UILabel!
     @IBOutlet var lbIntroduction: UILabel!
     @IBOutlet var userInfoView: UIView!
+    var filePath: String!
     
     // 재능 프로필 관련 데이터
     var talentProfileList:[TalentData] = []
@@ -40,7 +43,8 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     var userID: String = ""
     var talentID: String = ""
     var cateCode: String = ""
-    
+    var titleText: String!
+    var chatRoomID: Int?
     // 정보수정 다이얼로그에서 보여줄 텍스트
     var mainDescription: String = ""
     
@@ -91,16 +95,27 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         lbIntroduction.isUserInteractionEnabled = true
         lbIntroduction.addGestureRecognizer(introGesture)
         
+        // 메신저 클릭
+        let messageGesture = UITapGestureRecognizer(target: self, action: #selector(doChat(_:)))
+        ivMessage.isUserInteractionEnabled = true
+        ivMessage.addGestureRecognizer(messageGesture)
+        
         self.navigationController?.navigationBar.topItem?.title = ""
         
         picker.delegate = self
         
         if talentFlag == "Y" {
             userInfoView.backgroundColor = UIColor(red: 40.0/255.0, green: 54.0/255.0, blue: 74.0/255.0, alpha: 1.0)
+            ivMessage.image = ivMessage.image?.maskWithColor(color: UIColor(red: 255.0/255.0, green: 195.0/255.0, blue: 94.0/255.0, alpha: 1.0))
+            ivMap.image = ivMap.image?.maskWithColor(color: UIColor(red: 255.0/255.0, green: 195.0/255.0, blue: 94.0/255.0, alpha: 1.0))
+            
+            
         } else {
             userInfoView.backgroundColor = UIColor(red: 255.0/255.0, green: 195.0/255.0, blue: 94.0/255.0, alpha: 1.0)
+            ivMessage.image = ivMessage.image?.maskWithColor(color: UIColor(red: 40.0/255.0, green: 54.0/255.0, blue: 74.0/255.0, alpha: 1.0))
+            ivMap.image = ivMap.image?.maskWithColor(color: UIColor(red: 40.0/255.0, green: 54.0/255.0, blue: 74.0/255.0, alpha: 1.0))
         }
- 
+
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -110,9 +125,20 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             mapViewController.selLat = mapViewLat
             mapViewController.selLng = mapViewLng
             mapViewController.addressName = mapViewAddress
+            break
+        case "segueMessenger":
+            let messengerViewController = segue.destination as! MessengerViewController
+            messengerViewController.receiverID = self.userID
+            messengerViewController.roomID = String(self.chatRoomID!)
+            messengerViewController.userName = self.lbName.text!
+            break
         default:
             return
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.title = titleText
     }
     
     // MARK: - Functions
@@ -127,16 +153,29 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                 case .success(let value):
                     let json = value as! [String:Any]
                     self.lbName.text = json["USER_NAME"] as? String
+                    self.filePath = json["S_FILE_PATH"] as? String
                     if json["S_FILE_PATH"] as! String != "NODATA" {
                         let path = json["S_FILE_PATH"] as! String
                         let url = URL(string: "http://13.209.191.97/Accepted/" + path)
                         self.ivUser.load(url: url!)
                     }
                     
+                    if self.userID != UserDefaults.standard.string(forKey: "userID") {
+                        self.ivModify.isHidden = true
+                        self.ivDelete.isHidden = true
+                    }
+                    
                     if json["GENDER"] as! String == "남" {
                         self.ivGender.image = UIImage(named: "icon_male.png")
                     } else {
                         self.ivGender.image = UIImage(named: "icon_female.png")
+                    }
+                    
+                    if self.talentFlag == "Y" {
+                        self.ivGender.image = self.ivGender.image?.maskWithColor(color: UIColor(red: 255.0/255.0, green: 195.0/255.0, blue: 94.0/255.0, alpha: 1.0))
+                        
+                    } else {
+                        self.ivGender.image = self.ivGender.image?.maskWithColor(color: UIColor(red: 40.0/255.0, green: 54.0/255.0, blue: 74.0/255.0, alpha: 1.0))
                     }
                     self.lbBirth.text = json["USER_BIRTH"] as? String
                     self.lbIntroduction.text = json["PROFILE_DESCRIPTION"] as? String
@@ -410,7 +449,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                                 hashStr += tag + " "
                                 hashArr += tag + "|"
                             }
-                            hashArr.remove(at: hashArr.endIndex)
+                            hashArr = String(hashArr[hashArr.startIndex..<hashArr.index(before: hashArr.endIndex)])
                             self.insertHashValue(hashValue: hashArr)
                             
                         } else {
@@ -586,7 +625,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     
     // 재능 삭제 함수
     func delTalent(){
-        AF.request("http://175.213.4.39/Accepted/Hashtag/deleteTalent.do", method: .post, parameters:["UserID":self.userID, "TalentFlag":talentFlag, "TalentCateCode": cateCode])
+        AF.request("http://175.213.4.39/Accepted/Hashtag/deleteTalent.do", method: .post, parameters:["UserID":self.userID, "TalentFlag":talentFlag, "TalentCateCode": self.cateCode])
             .validate()
             .responseJSON {
                 response in
@@ -595,6 +634,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                 case .success(let value):
                     let json = value as! [String:Any]
                     if json["result"] as! String == "success" {
+                        self.navigationController?.popViewController(animated: true)
                         print("삭제 성공")
                     } else {
                         print("삭제 실패")
@@ -654,6 +694,16 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         }
     }
     
+    @objc func doChat(_ sender: UITapGestureRecognizer) {
+        let roomID = CommonFunctions().makeChatRoom(userID: self.userID, userName: self.lbName.text!, filePath: self.filePath!)
+        print(roomID)
+        if roomID < 0 {
+            return
+        } else {
+            self.chatRoomID = roomID
+            self.performSegue(withIdentifier: "segueMessenger", sender: nil)
+        }
+    }
 }
 
 // MARK: - Object

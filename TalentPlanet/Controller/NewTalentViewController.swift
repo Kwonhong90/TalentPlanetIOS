@@ -18,6 +18,10 @@ class NewTalentViewController: UIViewController {
     var talentFlag: String!
     var cateCode: Int!
     var talentID: Int!
+    var titleText: String!
+    
+    @IBOutlet var lbTitle: UILabel!
+    @IBOutlet var ivAddBackground: UIImageView!
     
     @IBOutlet var ivAdd: UIImageView!
     @IBOutlet var ivUser: UIImageView!
@@ -27,7 +31,7 @@ class NewTalentViewController: UIViewController {
     @IBOutlet var ivPublicCheck: UIImageView!
     @IBOutlet var lbAddress: UILabel!
     @IBOutlet var lbIntroduction: UILabel!
-    @IBOutlet var userInfoVIew: UIView!
+    @IBOutlet var userInfoView: UIView!
     
     // 맵뷰에 보낼 변수
     var mapViewLat: String = ""
@@ -71,6 +75,7 @@ class NewTalentViewController: UIViewController {
         lbIntroduction.isUserInteractionEnabled = true
         lbIntroduction.addGestureRecognizer(introGesture)
         
+        changeTalentFlag(talentFlag: self.talentFlag)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -83,6 +88,10 @@ class NewTalentViewController: UIViewController {
         default:
             return
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.title = titleText
     }
     
     // MARK: - Functions
@@ -288,7 +297,7 @@ class NewTalentViewController: UIViewController {
     
     // 재능 내용 저장 로직
     func saveProfileDescription(description: String){
-        AF.request("http://175.213.4.39/Accepted/Hashtag/editUserTalent.do", method: .post, parameters:["UserID":self.userID, "TalentDescription":description, "TalentFlag": self.talentFlag, "TalentCateCode":self.cateCode])
+        AF.request("http://175.213.4.39/Accepted/Hashtag/editUserTalent.do", method: .post, parameters:["UserID":self.userID, "TalentDescription":description, "TalentFlag": self.talentFlag!, "TalentCateCode":self.cateCode!])
             .validate()
             .responseJSON {
                 response in
@@ -297,6 +306,7 @@ class NewTalentViewController: UIViewController {
                 case .success(let value):
                     let talentID = value as! Int
                     if talentID > 0 {
+                        print("talent id = \(talentID)")
                         self.talentID = talentID
                         let regex = try? NSRegularExpression(pattern: "#[a-z0-9]+", options: .caseInsensitive)
                         
@@ -314,9 +324,10 @@ class NewTalentViewController: UIViewController {
                                 hashStr += tag + " "
                                 hashArr += tag + "|"
                             }
-                            hashArr.remove(at: hashArr.endIndex)
+                            hashArr = String(hashArr[hashArr.startIndex..<hashArr.index(before: hashArr.endIndex)])
                             self.insertHashValue(hashValue: hashArr)
                         }
+                        self.navigationController?.popViewController(animated: true)
                     } else {
                         print("저장 실패")
                     }
@@ -344,6 +355,7 @@ class NewTalentViewController: UIViewController {
                     let json = value as! [String:Any]
                     if json["result"] as! String == "success" {
                         
+                        print("1q2w3e4r")
                     } else {
                         print("저장 실패")
                     }
@@ -507,6 +519,20 @@ class NewTalentViewController: UIViewController {
                     alert.addAction(alertAction)
                     self.present(alert, animated: true, completion: nil)
                 }
+        }
+    }
+    
+    // 재능 Flag 에 따라 뷰 변경
+    func changeTalentFlag(talentFlag: String) {
+
+        if talentFlag == "Y" {
+            ivAddBackground.image = UIImage(named: "pic_notalent_teacher.png")
+            userInfoView.backgroundColor = UIColor(red: 40.0/255.0, green: 54.0/255.0, blue: 74.0/255.0, alpha: 1.0)
+            lbTitle.text = "당신의 재능을 나누어주세요."
+        } else {
+            ivAddBackground.image = UIImage(named: "pic_notalent_student.png")
+            userInfoView.backgroundColor = UIColor(red: 255.0/255.0, green: 195.0/255.0, blue: 94.0/255.0, alpha: 1.0)
+            lbTitle.text = "당신의 배움을 응원합니다."
         }
     }
 }

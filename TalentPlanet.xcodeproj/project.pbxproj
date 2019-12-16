@@ -138,6 +138,7 @@
 		8BF9C74B2339E3EF00BE14FF /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF9C74A2339E3EF00BE14FF /* LoginViewController.swift */; };
 		8BF9C74D2339FBDD00BE14FF /* JoinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF9C74C2339FBDD00BE14FF /* JoinViewController.swift */; };
 		8BF9C74F2339FBEA00BE14FF /* FindViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF9C74E2339FBEA00BE14FF /* FindViewController.swift */; };
+		8D314E4B239E3D1D00376DD3 /* BaseTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D314E4A239E3D1D00376DD3 /* BaseTabBarController.swift */; };
 		8D7E5DB5239A222B00E3BCFA /* icon_search_student.png in Resources */ = {isa = PBXBuildFile; fileRef = 8D7E5DB4239A222A00E3BCFA /* icon_search_student.png */; };
 		EFAB57BDBF1FF9FAFEAF8485 /* Pods_TalentPlanet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF43478D555086FDD03DBCE2 /* Pods_TalentPlanet.framework */; };
 /* End PBXBuildFile section */
@@ -307,6 +308,7 @@
 		8BF9C74A2339E3EF00BE14FF /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		8BF9C74C2339FBDD00BE14FF /* JoinViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinViewController.swift; sourceTree = "<group>"; };
 		8BF9C74E2339FBEA00BE14FF /* FindViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindViewController.swift; sourceTree = "<group>"; };
+		8D314E4A239E3D1D00376DD3 /* BaseTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTabBarController.swift; sourceTree = "<group>"; };
 		8D7E5DB4239A222A00E3BCFA /* icon_search_student.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon_search_student.png; path = ../../../../Downloads/icon_search_student.png; sourceTree = "<group>"; };
 		AF43478D555086FDD03DBCE2 /* Pods_TalentPlanet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TalentPlanet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9867FB4E2C15EEC30BA8137 /* Pods-TalentPlanet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TalentPlanet.release.xcconfig"; path = "Target Support Files/Pods-TalentPlanet/Pods-TalentPlanet.release.xcconfig"; sourceTree = "<group>"; };
@@ -390,6 +392,7 @@
 				8B530047237E66FE00DC62CB /* NewTalentViewController.swift */,
 				8B8430D1238E3D86003FF473 /* MessageListViewController.swift */,
 				8B47B540238F924900398606 /* MessengerViewController.swift */,
+				8D314E4A239E3D1D00376DD3 /* BaseTabBarController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -874,6 +877,7 @@
 			files = (
 				8B0F67C02379200800E4AED1 /* TalentRegistViewController.swift in Sources */,
 				8B8430D4238E3E0D003FF473 /* MessengerListCell.swift in Sources */,
+				8D314E4B239E3D1D00376DD3 /* BaseTabBarController.swift in Sources */,
 				8BF9C5EE2339AA2D00BE14FF /* ViewController.swift in Sources */,
 				8BBF9F3E2355ABF90086C747 /* TalentShareCell.swift in Sources */,
 				8B53006923827CC600DC62CB /* FMDatabasePool.m in Sources */,

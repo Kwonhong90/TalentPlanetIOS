@@ -28,7 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 USER_ID TEXT,
                 CONTENT TEXT,
                 CREATION_DATE TEXT,
-                READED_FLAG TEZT,
+                READED_FLAG TEXT,
                 POINT_MSG_FLAG TEXT DEFAULT 0,
                 POINT_SEND_FLAG TEXT DEFAULT 0
             )

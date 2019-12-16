@@ -46,9 +46,9 @@ class HomeViewController: UIViewController {
     // MARK: - Variables
     // stack view 담을 배열
     var mainButtons:[UIStackView] = []
-    
     var talentFlag = "Y"
     var dropDown: DropDown?
+    var delegate: SendTalentFlagDelegate?
     
     // 메인 뷰 Stack View 정의
     @IBOutlet var svCareer: UIStackView!
@@ -59,7 +59,7 @@ class HomeViewController: UIViewController {
     @IBOutlet var svVolunteer: UIStackView!
     @IBOutlet var svIt: UIStackView!
     @IBOutlet var svCulture: UIStackView!
-    @IBOutlet var svSport: UIStackView!
+    @IBOutlet var svSports: UIStackView!
     @IBOutlet var svMusic: UIStackView!
     @IBOutlet var svCamera: UIStackView!
     @IBOutlet var svBeauty: UIStackView!
@@ -69,6 +69,11 @@ class HomeViewController: UIViewController {
     @IBOutlet var talentListView: UIView!
     @IBOutlet var ivSearch: UIImageView!
     @IBOutlet var ivAddCate: UIImageView!
+    
+    @IBOutlet var lbBannerTop: UILabel!
+    @IBOutlet var lbBannerBottom: UILabel!
+    @IBOutlet var btnBanner: UIButton!
+    @IBOutlet var addCateView: UIView!
     
     @IBOutlet var naviItem: UINavigationItem!
     @IBOutlet var btnTitle: UIButton!
@@ -82,7 +87,7 @@ class HomeViewController: UIViewController {
     // MARK: - Init
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         // 유저 기본 정보 저장
         let defaults = UserDefaults.standard
         defaults.set("mkh9012@naver.co", forKey: "userID")
@@ -96,17 +101,29 @@ class HomeViewController: UIViewController {
         dropDown?.selectionAction = { [unowned self] (index: Int, item: String) in
             self.btnTitle.setTitle(item, for: .normal)
             self.initNavigationItemTitleView(title: item)
-            
+            let tabbar = self.tabBarController as! BaseTabBarController
             if index == 0 {
                 self.talentListView.backgroundColor = UIColor(red: 40.0/255.0, green: 54.0/255.0, blue: 74.0/255.0, alpha: 1.0)
                 self.talentFlag = "Y"
+                tabbar.talentFlag = "Y"
+                self.changeCateViewColor(color: .white)
                 self.ivSearch.image = UIImage(named: "icon_search_teacher.png")
                 self.ivAddCate.image = UIImage(named: "icon_addcate_teacher.png")
+                
+                self.lbBannerTop.text = "당산의 재능을 기다립니다."
+                self.lbBannerBottom.text = "지금 바로 학생들을 찾아보세요!"
+                self.btnBanner.setTitle("Teacher 재능 등록하기 >", for: .normal)
             } else {
                 self.talentListView.backgroundColor = UIColor(red: 255.0/255.0, green: 195.0/255.0, blue: 94.0/255.0, alpha: 1.0)
                 self.talentFlag = "N"
+                tabbar.talentFlag = "N"
+                self.changeCateViewColor(color: .black)
                 self.ivSearch.image = UIImage(named: "icon_search_student.png")
                 self.ivAddCate.image = UIImage(named: "icon_addcate_student.png")
+                
+                self.lbBannerTop.text = "당신의 배움을 응원합니다."
+                self.lbBannerBottom.text = "지금 바로 선생님을 찾아보세요!"
+                self.btnBanner.setTitle("Student 재능 등록하기 >", for: .normal)
             }
 
         }
@@ -118,7 +135,7 @@ class HomeViewController: UIViewController {
         mainButtons.append(svVolunteer)
         mainButtons.append(svIt)
         mainButtons.append(svCulture)
-        mainButtons.append(svSport)
+        mainButtons.append(svSports)
         mainButtons.append(svMusic)
         mainButtons.append(svCamera)
         mainButtons.append(svBeauty)
@@ -155,6 +172,7 @@ class HomeViewController: UIViewController {
                 index = index + 1
             }
         }
+        delegate?.sendData(talentFlag: self.talentFlag)
     }
     
     
@@ -172,11 +190,31 @@ class HomeViewController: UIViewController {
         dropDown?.show()
     }
     
+    func changeCateViewColor(color: UIColor){
+        for button:UIStackView in mainButtons {
+            let subView = button.arrangedSubviews[0]
+            let subImgView = subView.allSubViewsOf(type: UIImageView.self)[0] as UIImageView
+            
+            let subLabel = button.arrangedSubviews[1] as! UILabel
+
+            subLabel.textColor = color
+            subImgView.image = subImgView.image?.maskWithColor(color: color)
+        }
+        
+        let bottomLabels = addCateView.allSubViewsOf(type: UILabel.self)
+        
+        for label: UILabel in bottomLabels {
+            label.textColor = color
+        }
+    }
+    
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+
         switch segue.identifier! {
         case "segueTalentList":
+            print("1q2w3e")
             let talentShareViewController = segue.destination as! TalentShareViewController
             talentShareViewController.cateCode = selectedCateCode
             talentShareViewController.titleName = selectedTitle
@@ -185,9 +223,15 @@ class HomeViewController: UIViewController {
         case "segueTalentRegist":
             let talentRegistViewController = segue.destination as! TalentRegistViewController
             break
+        case "segueMenu":
+            let sideMenuViewController = segue.destination as! SideMenuViewController
+            sideMenuViewController.talentFlag = self.talentFlag
+            print("asdfasdf")
+            break
         default:
             return
         }
+        
     }
     
     private func initNavigationItemTitleView(title: String) {
@@ -242,4 +286,38 @@ extension UIImage {
         }
     }
 
+}
+
+extension UIView {
+
+    /** This is the function to get subViews of a view of a particular type
+*/
+    func subViews<T : UIView>(type : T.Type) -> [T]{
+        var all = [T]()
+        for view in self.subviews {
+            if let aView = view as? T{
+                all.append(aView)
+            }
+        }
+        return all
+    }
+
+
+/** This is a function to get subViews of a particular type from view recursively. It would look recursively in all subviews and return back the subviews of the type T */
+        func allSubViewsOf<T : UIView>(type : T.Type) -> [T]{
+            var all = [T]()
+            func getSubview(view: UIView) {
+                if let aView = view as? T{
+                all.append(aView)
+                }
+                guard view.subviews.count>0 else { return }
+                view.subviews.forEach{ getSubview(view: $0) }
+            }
+            getSubview(view: self)
+            return all
+        }
+    }
+
+protocol SendTalentFlagDelegate {
+    func sendData(talentFlag: String)
 }

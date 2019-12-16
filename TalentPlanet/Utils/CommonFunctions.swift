@@ -44,62 +44,68 @@ class CommonFunctions {
     }
     
     func getTalentImageNameArr() -> [String] {
-        return ["pic_career.png", "pic_study.png", "pic_money.png", "pic_it.png", "pic_camera.png", "pic_music.png", "pic_design.png", "pic_sports.png", "pic_living.png", "pic_beauty.png", "pic_volunteer.png", "pic_travel.png", "pic_culture.png"]
+        return ["pic_career.png", "pic_study.png", "pic_money.png", "pic_it.png", "pic_camera.png", "pic_music.png", "pic_design.png", "pic_sports.png", "pic_living.png", "pic_beauty.png", "pic_volunteer.png", "pic_travel.png", "pic_culture.png", "pic_game.png"]
     }
     
     func getTalentIconNameArr() -> [String] {
-        return ["icon_career.png", "icon_study.png", "icon_money.png", "icon_it.png", "icon_camera.png", "icon_music.png", "icon_design.png", "icon_sports.png", "icon_living.png", "icon_beauty.png", "icon_volunteer.png", "icon_travel.png", "icon_culture.png"]
+        return ["icon_career.png", "icon_study.png", "icon_money.png", "icon_it.png", "icon_camera.png", "icon_music.png", "icon_design.png", "icon_sports.png", "icon_living.png", "icon_beauty.png", "icon_volunteer.png", "icon_travel.png", "icon_culture.png", "icon_game.png"]
     }
     
     func makeChatRoom(userID: String, userName: String, filePath: String) -> Int {
         let dbName = "/accepted.db"
-        let filemgr = FileManager.default
         let dirPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         
         let docsDir = dirPaths[0] as String
         
         let databasesPath = docsDir.appending(dbName)
-        
-        if !filemgr.fileExists(atPath: databasesPath) {
+        print(databasesPath)
             let acceptedDB = FMDatabase(path: databasesPath)
-            
+
             if acceptedDB.open() {
                 let selectMaxMessageIdSql = "SELECT IFNULL(MAX(A.START_MESSAGE_ID), 0) AS START_MESSAGE_ID FROM TB_CHAT_ROOM A WHERE A.USER_ID = '\(userID)'"
                 let result = acceptedDB.executeQuery(selectMaxMessageIdSql, withArgumentsIn: [])
-                
+
                 if result == nil {
                     print("error : SELECT MAX MESSAGE ID")
                     return -1
                 } else {
+
                     let startMessageID = NSNumber(value: (result?.int(forColumnIndex: 0))!).intValue
                     
                     let selectMaxIdSql = "SELECT IFNULL(MAX(B.ROOM_ID), (SELECT IFNULL(MAX(C.ROOM_ID) + 1, 1) FROM TB_CHAT_ROOM C)) AS MESSAGE_ID FROM TB_CHAT_ROOM B WHERE B.USER_ID = '\(userID)' AND B.ACTIVATE_FLAG = 'Y'"
-                    
+
                     let result2 = acceptedDB.executeQuery(selectMaxIdSql, withArgumentsIn: [])
                     
                     if result2 == nil {
                         print("error : SELECT MAX ROOM ID")
                         return -1
                     } else {
-                        let roomID = NSNumber(value: (result2?.int(forColumnIndex: 0))!).intValue
+                        var roomID: Int!
+                        while result2!.next() {
+                            roomID = NSNumber(value: (result2?.int(forColumnIndex: 0))!).intValue
+                        }
                         let today = Date()
                         let dateFormatter = DateFormatter()
                         dateFormatter.dateFormat = "yyyy-MM-dd"
 
                         let todayStr = dateFormatter.string(from: today)
-                        let selectCrationDateSql = "SELECT IFNULL(MAX(CREATION_DATE), '\(todayStr)') AS CREATION_DATE FROM TB_CHAT_ROOM D WHERE D.USER_ID = '\(userID)'"
-                        let result3 = acceptedDB.executeQuery(selectCrationDateSql, withArgumentsIn: [])
+                        let selectCreationDateSql = "SELECT IFNULL(MAX(CREATION_DATE), '\(todayStr)') AS CREATION_DATE FROM TB_CHAT_ROOM D WHERE D.USER_ID = '\(userID)'"
+                        let result3 = acceptedDB.executeQuery(selectCreationDateSql, withArgumentsIn: [])
                         
                         if result3 == nil {
                             print("error : SELECT CREATION DATE")
                             return -1
                         } else {
-                            let creationDate = result3?.string(forColumnIndex: 0)
-                            let insertRoomSql = "INSERT OR REPLACE INTO TB_CHAT_ROOM(ROOM_ID, USER_ID, USER_NAME, MASTER_ID, START_MESSAGE_ID, CREATION_DATE, LAST_UPDATE_DATE, ACTIVIATE_FLAG, FILE_PATH) VALUES (\(String(describing: roomID)), '\(userID)', '\(userName)', '\(String(describing: UserDefaults.standard.string(forKey: "userID")))', '\(String(describing: startMessageID))', '\(String(describing: creationDate))', '\(todayStr)', 'Y', '\(filePath)')"
+                            var creationDate: String!
+                            while result3!.next() {
+                                creationDate = result3?.string(forColumn: "CREATION_DATE")!
+                            }
                             
-                            let result4 = acceptedDB.executeQuery(insertRoomSql, withArgumentsIn: [])
+                            let insertRoomSql = "INSERT OR REPLACE INTO TB_CHAT_ROOM(ROOM_ID, USER_ID, USER_NAME, MASTER_ID, START_MESSAGE_ID, CREATION_DATE, LAST_UPDATE_DATE, ACTIVATE_FLAG, FILE_PATH) VALUES (\(String(describing: roomID!)), '\(userID)', '\(userName)', '\(String(describing: UserDefaults.standard.string(forKey: "userID")!))', '\(String(describing: startMessageID))', '\(String(describing: creationDate!))', '\(todayStr)', 'Y', '\(filePath)')"
+
+                            let result4 = acceptedDB.executeUpdate(insertRoomSql, withArgumentsIn: [])
                             
-                            if result4 == nil {
+                            if !result4 {
                                 print("error : INSERT ROOM")
                             } else {
                                 return roomID
@@ -108,7 +114,7 @@ class CommonFunctions {
                     }
                 }
             }
-        }
+        
         return -1
     }
 }
