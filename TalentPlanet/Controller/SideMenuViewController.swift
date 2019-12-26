@@ -40,6 +40,10 @@ class SideMenuViewController: UIViewController {
             let talentRegistViewController = segue.destination as! TalentRegistViewController
             talentRegistViewController.talentFlag = self.talentFlag
             break
+        case "segueProfile":
+            let profileViewController = segue.destination as! ProfileViewController
+            profileViewController.userID = UserDefaults.standard.string(forKey: "userID")!
+            profileViewController.talentFlag = self.talentFlag
         default:
             break
         }

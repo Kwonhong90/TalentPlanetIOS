@@ -139,7 +139,7 @@
 		8BF9C74D2339FBDD00BE14FF /* JoinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF9C74C2339FBDD00BE14FF /* JoinViewController.swift */; };
 		8BF9C74F2339FBEA00BE14FF /* FindViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF9C74E2339FBEA00BE14FF /* FindViewController.swift */; };
 		8D314E4B239E3D1D00376DD3 /* BaseTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D314E4A239E3D1D00376DD3 /* BaseTabBarController.swift */; };
-		8D7E5DB5239A222B00E3BCFA /* icon_search_student.png in Resources */ = {isa = PBXBuildFile; fileRef = 8D7E5DB4239A222A00E3BCFA /* icon_search_student.png */; };
+		8DFFBCAD23A714710094CBC2 /* icon_search_student.png in Resources */ = {isa = PBXBuildFile; fileRef = 8DFFBCAC23A714700094CBC2 /* icon_search_student.png */; };
 		EFAB57BDBF1FF9FAFEAF8485 /* Pods_TalentPlanet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF43478D555086FDD03DBCE2 /* Pods_TalentPlanet.framework */; };
 /* End PBXBuildFile section */
 
@@ -309,7 +309,7 @@
 		8BF9C74C2339FBDD00BE14FF /* JoinViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinViewController.swift; sourceTree = "<group>"; };
 		8BF9C74E2339FBEA00BE14FF /* FindViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindViewController.swift; sourceTree = "<group>"; };
 		8D314E4A239E3D1D00376DD3 /* BaseTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTabBarController.swift; sourceTree = "<group>"; };
-		8D7E5DB4239A222A00E3BCFA /* icon_search_student.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon_search_student.png; path = ../../../../Downloads/icon_search_student.png; sourceTree = "<group>"; };
+		8DFFBCAC23A714700094CBC2 /* icon_search_student.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_search_student.png; sourceTree = "<group>"; };
 		AF43478D555086FDD03DBCE2 /* Pods_TalentPlanet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TalentPlanet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9867FB4E2C15EEC30BA8137 /* Pods-TalentPlanet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TalentPlanet.release.xcconfig"; path = "Target Support Files/Pods-TalentPlanet/Pods-TalentPlanet.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -515,6 +515,7 @@
 				8B14B4BE2354402A008116ED /* icon_checkbox_selected.png */,
 				8B14B4D82354402E008116ED /* icon_checkbox_unselected.png */,
 				8B14B4FC23544034008116ED /* icon_claim.png */,
+				8DFFBCAC23A714700094CBC2 /* icon_search_student.png */,
 				8B14B51423544039008116ED /* icon_close.png */,
 				8B14B50023544035008116ED /* icon_culture.png */,
 				8B14B4EC23544031008116ED /* icon_deletecheck.png */,
@@ -533,7 +534,6 @@
 				8B14B50F23544038008116ED /* icon_female.png */,
 				8B14B4FB23544034008116ED /* icon_friend_dm.png */,
 				8B14B4F423544033008116ED /* icon_gallery.png */,
-				8D7E5DB4239A222A00E3BCFA /* icon_search_student.png */,
 				8B14B4E323544030008116ED /* icon_game.png */,
 				8B14B4CA2354402C008116ED /* icon_gauge.png */,
 				8B14B50923544037008116ED /* icon_heart.png */,
@@ -779,6 +779,7 @@
 				8B14B5422354403B008116ED /* pic_money.png in Resources */,
 				8B14B56F2354403B008116ED /* icon_female.png in Resources */,
 				8B14B56A2354403B008116ED /* icon_money.png in Resources */,
+				8DFFBCAD23A714710094CBC2 /* icon_search_student.png in Resources */,
 				8B14B53F2354403B008116ED /* icon_beauty.png in Resources */,
 				8B14B5542354403B008116ED /* icon_gallery.png in Resources */,
 				8BF9C5F12339AA2D00BE14FF /* Main.storyboard in Resources */,
@@ -797,7 +798,6 @@
 				8B14B5212354403B008116ED /* icon_male.png in Resources */,
 				8B14B52B2354403B008116ED /* icon_join_addinfo.png in Resources */,
 				8B14B54D2354403B008116ED /* icon_addcate_teacher.png in Resources */,
-				8D7E5DB5239A222B00E3BCFA /* icon_search_student.png in Resources */,
 				8B14B5252354403B008116ED /* icon_addcate_student.png in Resources */,
 				8B14B5472354403B008116ED /* icon_join_userinfo.png in Resources */,
 				8B14B53D2354403B008116ED /* point_send.png in Resources */,

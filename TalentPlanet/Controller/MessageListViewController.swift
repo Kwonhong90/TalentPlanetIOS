@@ -16,6 +16,10 @@ class MessageListViewController: UIViewController {
     var databasesPath: String!
     var filemgr: FileManager!
     
+    var selectedRoomID: String?
+    var selectedReceiverID: String?
+    var selectedUserName: String?
+    var nowDate: String!
     @IBOutlet var messengerListView: UITableView!
     
     // MARK: - Init
@@ -28,54 +32,80 @@ class MessageListViewController: UIViewController {
         
         databasesPath = docsDir.appending(dbName)
         
-        getMessengerList()
+        messengerListView.delegate = self
+        messengerListView.dataSource = self
         
+        // 현재 시간 구하기
+        let today = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+
+        nowDate = dateFormatter.string(from: today)
+        
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        switch segue.identifier {
+        case "segueChat":
+            let messengerViewController = segue.destination as! MessengerViewController
+            messengerViewController.roomID = self.selectedRoomID!
+            messengerViewController.receiverID = self.selectedReceiverID!
+            messengerViewController.userName = self.selectedUserName!
+            break;
+        default:
+            return
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        getMessengerList()
     }
     
     // MARK: - Functions
     func getMessengerList(){
-        if !filemgr.fileExists(atPath: databasesPath) {
-            let acceptedDB = FMDatabase(path: databasesPath)
-            
-            if acceptedDB.open() {
-                let sql = """
-                            SELECT D01.ROOM_ID,
-                                   D01.USER_NAME,
-                                   D03.UNREADED_COUNT,
-                                   D06.CONTENT,
-                                   D06.CREATION_DATE,
-                                   D01.USER_ID,
-                                   D01.START_MESSAGE_ID,
-                                   D01.FILE_PATH
-                            FROM   TB_CHAT_ROOM D01
-                            LEFT OUTER JOIN (SELECT D02.ROOM_ID,
-                                                    COUNT(D02.ROOM_ID) AS UNREADED_COUNT
-                                             FROM   TB_CHAT_LOG D02
-                                             WHERE  D02.READED_FLAG = 'N'
-                                             GROUP BY D02.ROOM_ID) D03 ON D01.ROOM_ID = D03.ROOM_ID
-                            LEFT OUTER JOIN (SELECT D04.ROOM_ID,
-                                                    D04.CONTENT,
-                                                    D04.CREATION_DATE
-                                             FROM   TB_CHAT_LOG D04
-                                             WHERE  D04.MESSAGE_ID IN (SELECT MAX(D05.MESSAGE_ID)
-                                                                       FROM   TB_CHAT_LOG D05
-                                                                       GROUP BY D05.ROOMID)) D06 ON D01.ROOM_ID = D06.ROOM_ID
-                            WHERE  D01.ACTIVIATE_FLAG = 'Y'
-                            AND    D01.MASTER_ID = '\(UserDefaults.standard.string(forKey: "userID")!)'
-                            ORDER BY D06.CREATION_DATE ASC
-                          """
+        let acceptedDB = FMDatabase(path: databasesPath)
+        datas = []
+        if acceptedDB.open() {
+            let sql = """
+                        SELECT D01.ROOM_ID,
+                               D01.USER_NAME,
+                               IFNULL(D03.UNREADED_COUNT, 0) as UNREADED_COUNT,
+                               IFNULL(D06.CONTENT, '') as CONTENT,
+                               IFNULL(D06.CREATION_DATE, D01.CREATION_DATE) as CREATION_DATE,
+                               D01.USER_ID,
+                               D01.START_MESSAGE_ID,
+                               D01.FILE_PATH
+                        FROM   TB_CHAT_ROOM D01
+                        LEFT OUTER JOIN (SELECT D02.ROOM_ID,
+                                                COUNT(D02.ROOM_ID) AS UNREADED_COUNT
+                                         FROM   TB_CHAT_LOG D02
+                                         WHERE  D02.READED_FLAG = 'N'
+                                         GROUP BY D02.ROOM_ID) D03 ON D01.ROOM_ID = D03.ROOM_ID
+                        LEFT OUTER JOIN (SELECT D04.ROOM_ID,
+                                                D04.CONTENT,
+                                                D04.CREATION_DATE
+                                         FROM   TB_CHAT_LOG D04
+                                         WHERE  D04.MESSAGE_ID IN (SELECT MAX(D05.MESSAGE_ID)
+                                                                   FROM   TB_CHAT_LOG D05
+                                                                   GROUP BY D05.ROOM_ID)) D06 ON D01.ROOM_ID = D06.ROOM_ID
+                        WHERE  D01.ACTIVATE_FLAG = 'Y'
+                        AND    D01.MASTER_ID = '\(UserDefaults.standard.string(forKey: "userID")!)'
+                        ORDER BY D06.CREATION_DATE ASC
+                      """
 
-                let result = acceptedDB.executeQuery(sql, withArgumentsIn: [])
-                if result == nil {
-                    print("Error : \(acceptedDB.lastErrorMessage())")
-                } else {
-                    while (result!.next()) {
-                        datas.append(MessengerData(userID: (result?.string(forColumn: "USER_ID"))!, userName: (result?.string(forColumn: "USER_NAME"))!, content: (result?.string(forColumn: "CONTENT"))!, sendDate: (result?.string(forColumn: "CREATION_DATE"))!, profileImageUri: (result?.string(forColumn: "FILE_PATH"))!))
-                    }
+            let result = acceptedDB.executeQuery(sql, withArgumentsIn: [])
+            if result == nil {
+                print("Error : \(acceptedDB.lastErrorMessage())")
+            } else {
+                while (result!.next()) {
+                    datas.append(MessengerData(userID: (result?.string(forColumn: "USER_ID"))!, userName: (result?.string(forColumn: "USER_NAME"))!, content: (result?.string(forColumn: "CONTENT"))!, sendDate: (result?.string(forColumn: "CREATION_DATE"))!, profileImageUri: (result?.string(forColumn: "FILE_PATH"))!, roomID: (result?.string(forColumn: "ROOM_ID"))!))
                 }
-
+                
+                messengerListView.reloadData()
             }
+
         }
+        
     }
 }
 
@@ -107,7 +137,20 @@ extension MessageListViewController: UITableViewDataSource {
         }
         
         cell.lbContent.text = rowData.content
-        cell.lbDate.text = rowData.sendDate
+        let splitDate = rowData.sendDate.components(separatedBy: ",")
+        
+        if splitDate[0] == nowDate {
+            if splitDate.count > 2 {
+                let timeIndex = splitDate[1].index(splitDate[1].endIndex, offsetBy: -3)
+                let time = String(splitDate[1][..<timeIndex])
+                cell.lbDate.text = time
+            } else {
+                cell.lbDate.text = ""
+            }
+        } else {
+            cell.lbDate.text = splitDate[0]
+        }
+        
         cell.lbName.text = rowData.userName
         
         return cell
@@ -122,8 +165,11 @@ extension MessageListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         messengerListView.deselectRow(at: indexPath, animated: true)
         let rowData:MessengerData = datas[indexPath.row]
-
-        self.performSegue(withIdentifier: "segueProfile", sender: nil)
+        selectedRoomID = rowData.roomID
+        selectedReceiverID = rowData.userID
+        selectedUserName = rowData.userName
+        
+        self.performSegue(withIdentifier: "segueChat", sender: nil)
     }
 }
 
@@ -133,12 +179,14 @@ class MessengerData {
     var content:String
     var sendDate:String
     var profileImageUri:String
+    var roomID:String
     
-    init(userID:String, userName:String, content:String, sendDate:String, profileImageUri:String) {
+    init(userID: String, userName: String, content: String, sendDate: String, profileImageUri: String, roomID: String) {
         self.userID = userID
         self.userName = userName
         self.content = content
         self.sendDate = sendDate
         self.profileImageUri = profileImageUri
+        self.roomID = roomID
     }
 }

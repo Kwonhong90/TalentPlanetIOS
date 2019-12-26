@@ -103,6 +103,7 @@ class TalentShareViewController: UIViewController{
             profileViewContorller.userID = self.selectedUserID
             profileViewContorller.talentID = self.selectedTalentID
             profileViewContorller.cateCode = self.cateCode
+            profileViewContorller.titleText = self.titleName
         default:
             return
         }

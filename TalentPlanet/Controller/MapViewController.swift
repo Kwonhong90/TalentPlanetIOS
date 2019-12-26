@@ -16,6 +16,7 @@ class MapViewController: UIViewController, UISearchBarDelegate, CLLocationManage
     var selLat: String!
     var selLng: String!
     var addressName: String!
+    var userID: String!
 
     // 컨트롤러 변수
     var searchController: UISearchController!
@@ -27,7 +28,7 @@ class MapViewController: UIViewController, UISearchBarDelegate, CLLocationManage
     var pointAnnotation:MKPointAnnotation!
     var pinAnnotationView:MKPinAnnotationView!
     let locationManager = CLLocationManager()
-    
+    var pinTitle = ""
     let defaults = UserDefaults.standard
     
     // 화면 바인딩 변수
@@ -43,6 +44,15 @@ class MapViewController: UIViewController, UISearchBarDelegate, CLLocationManage
         locationManager.startUpdatingHeading()
         mapView.showsUserLocation = true
         
+        if self.userID == UserDefaults.standard.string(forKey: "userID") {
+            let touchGesture = UITapGestureRecognizer(target: self, action: #selector(touchMap(sender:)))
+            mapView.isUserInteractionEnabled = true
+            mapView.addGestureRecognizer(touchGesture)
+            pinTitle = "기존 위치"
+        } else {
+            pinTitle = "상대방 위치"
+        }
+        
         if !selLat.isEmpty {
             let latitude = Double(selLat)!
             let longitude = Double(selLng)!
@@ -51,9 +61,7 @@ class MapViewController: UIViewController, UISearchBarDelegate, CLLocationManage
         
         self.title = addressName
         
-        let touchGesture = UITapGestureRecognizer(target: self, action: #selector(touchMap(sender:)))
-        mapView.isUserInteractionEnabled = true
-        mapView.addGestureRecognizer(touchGesture)
+
     }
     
     @IBAction func showSearchBar(_ sender: Any) {
@@ -107,7 +115,7 @@ class MapViewController: UIViewController, UISearchBarDelegate, CLLocationManage
         let locationRegion = MKCoordinateRegion.init(center: coordinateLocation, span: spanValue)
         
         self.pointAnnotation = MKPointAnnotation()
-        self.pointAnnotation.title = "기존 위치"
+        self.pointAnnotation.title = pinTitle
         self.pointAnnotation.coordinate = CLLocationCoordinate2DMake(latitude, longitude)
         
         self.pinAnnotationView = MKPinAnnotationView(annotation: self.pointAnnotation, reuseIdentifier: nil)

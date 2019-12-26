@@ -9,6 +9,7 @@
 import UIKit
 import Alamofire
 import CoreLocation
+import DropDown
 
 class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
@@ -56,6 +57,10 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     // 사진 관련 변수
     let picker = UIImagePickerController()
     
+    // 드롭다운
+    var dropDown: DropDown?
+    var dropDownTitles: [String]?
+    
     // MARK: - Init
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -85,15 +90,18 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         ivUser.isUserInteractionEnabled = true
         ivUser.addGestureRecognizer(pictureTapGesture)
         
-        // 생일 공개 여부
-        let birthGesture = UITapGestureRecognizer(target: self, action: #selector(clickPublicFlag(_:)))
-        ivPublicCheck.isUserInteractionEnabled = true
-        ivPublicCheck.addGestureRecognizer(birthGesture)
-        
-        // 소개글 수정
-        let introGesture = UITapGestureRecognizer(target: self, action: #selector(modifyIntro(_:)))
-        lbIntroduction.isUserInteractionEnabled = true
-        lbIntroduction.addGestureRecognizer(introGesture)
+        // 내 프로필인 경우만 변경 가능
+        if self.userID == UserDefaults.standard.string(forKey: "userID") {
+            // 생일 공개 여부
+            let birthGesture = UITapGestureRecognizer(target: self, action: #selector(clickPublicFlag(_:)))
+            ivPublicCheck.isUserInteractionEnabled = true
+            ivPublicCheck.addGestureRecognizer(birthGesture)
+            
+            // 소개글 수정
+            let introGesture = UITapGestureRecognizer(target: self, action: #selector(modifyIntro(_:)))
+            lbIntroduction.isUserInteractionEnabled = true
+            lbIntroduction.addGestureRecognizer(introGesture)
+        }
         
         // 메신저 클릭
         let messageGesture = UITapGestureRecognizer(target: self, action: #selector(doChat(_:)))
@@ -102,8 +110,10 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         
         self.navigationController?.navigationBar.topItem?.title = ""
         
+        // 프사 관련 Delegate 설정
         picker.delegate = self
         
+        // Talent Flag에 따른 View 변경
         if talentFlag == "Y" {
             userInfoView.backgroundColor = UIColor(red: 40.0/255.0, green: 54.0/255.0, blue: 74.0/255.0, alpha: 1.0)
             ivMessage.image = ivMessage.image?.maskWithColor(color: UIColor(red: 255.0/255.0, green: 195.0/255.0, blue: 94.0/255.0, alpha: 1.0))
@@ -125,6 +135,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             mapViewController.selLat = mapViewLat
             mapViewController.selLng = mapViewLng
             mapViewController.addressName = mapViewAddress
+            mapViewController.userID = self.userID
             break
         case "segueMessenger":
             let messengerViewController = segue.destination as! MessengerViewController
@@ -138,7 +149,9 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        self.title = titleText
+        if self.titleText != nil {
+            self.initNavigationItemTitleView(title: self.titleText)
+        }
     }
     
     // MARK: - Functions
@@ -163,6 +176,8 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                     if self.userID != UserDefaults.standard.string(forKey: "userID") {
                         self.ivModify.isHidden = true
                         self.ivDelete.isHidden = true
+                    } else {
+                        self.ivMessage.isHidden = true
                     }
                     
                     if json["GENDER"] as! String == "남" {
@@ -240,6 +255,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                 var message:String
                 switch response.result {
                 case .success(let value):
+                    self.dropDownTitles = []
                     let jsonArray = value as! [[String:Any]]
                     if jsonArray.count == 0 {
                         let alert :UIAlertController = UIAlertController(title: "프로필 없음", message: "등록된 재능이 없습니다. 재능을 등록해주세요.", preferredStyle: UIAlertController.Style.alert)
@@ -276,15 +292,37 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                             self.tvTalentDescription.text = data.talentDescription
                             self.mainDescription = data.talentDescription
                             self.ivProfile.image = UIImage(named:data.backgroundID + ".png")
-                            self.title = CommonFunctions().getTalentTitleByCateCode(cateCode: data.cateCode)
+                            self.titleText = CommonFunctions().getTalentTitleByCateCode(cateCode: data.cateCode)
+                            self.initNavigationItemTitleView(title: self.titleText)
                             
+                        } else if index == 0 {
+                            let splitText = data.talentDescription.split(separator: " ")
+                            var hashStr = ""
+                            for text in splitText {
+                                if text.first == "#" {
+                                    hashStr += text + " "
+                                }
+                            }
+                            
+                            self.lbTag.text = hashStr
+                            self.tvTalentDescription.text = data.talentDescription
+                            self.mainDescription = data.talentDescription
+                            self.ivProfile.image = UIImage(named:data.backgroundID + ".png")
+                            self.titleText = CommonFunctions().getTalentTitleByCateCode(cateCode: data.cateCode)
+                            self.initNavigationItemTitleView(title: self.titleText)
                         }
                         
-                        
+                        self.dropDownTitles!.append(CommonFunctions().getTalentTitleByCateCode(cateCode: data.cateCode))
                         index = index + 1
                     }
 
-                    
+
+                    self.dropDown = DropDown()
+                    self.dropDown?.dataSource = self.dropDownTitles!
+                    self.dropDown?.selectionAction = { [unowned self] (index: Int, item: String) in
+                        self.talentID = String(self.talentProfileList[index].talentID)
+                        self.getUserTalentData()
+                    }
                 case .failure(let error):
                     print("Error in network \(error)")
                     message = "서버 통신에 실패하였습니다. 관리자에게 문의해주시기 바랍니다."
@@ -294,6 +332,30 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                     self.present(alert, animated: true, completion: nil)
                 }
         }
+    }
+    
+    // 타이틀 클릭 시 드롭다운 보여주기
+    @objc func dropDownButton(){
+        dropDown?.show()
+    }
+    
+    // 타이틀 초기화
+    private func initNavigationItemTitleView(title: String) {
+        let titleView = UILabel()
+        titleView.text = title
+        titleView.font = UIFont(name: "HelveticaNeue-Medium", size: 17)
+        let width = titleView.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)).width
+        titleView.frame = CGRect(origin:CGPoint.zero, size:CGSize(width: width, height: 500))
+        
+        dropDown?.anchorView = titleView // UIView or UIBarButtonItem
+        dropDown?.bottomOffset = CGPoint(x: 0, y:(dropDown?.anchorView?.plainView.bounds.height)!)
+        // The list of items to display. Can be changed dynamically
+        
+        self.navigationController?.navigationBar.topItem?.titleView = titleView
+        
+        let recognizer = UITapGestureRecognizer(target: self, action: #selector(dropDownButton))
+        titleView.isUserInteractionEnabled = true
+        titleView.addGestureRecognizer(recognizer)
     }
     
     // 수정 다이얼로그
@@ -694,6 +756,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         }
     }
     
+    // 메신저 열기
     @objc func doChat(_ sender: UITapGestureRecognizer) {
         let roomID = CommonFunctions().makeChatRoom(userID: self.userID, userName: self.lbName.text!, filePath: self.filePath!)
         print(roomID)

@@ -108,8 +108,8 @@ class MessengerViewController: UIViewController, UITextFieldDelegate {
                     }
                     let splitDate = creationDate?.components(separatedBy: ",")
                     let date = splitDate![0]
-                    let timeIndex = splitDate![1].index(splitDate![1].startIndex, offsetBy: 8)
-                    let time = splitDate![1][..<timeIndex]
+                    let timeIndex = splitDate![1].index(splitDate![1].endIndex, offsetBy: -3)
+                    let time = String(splitDate![1][..<timeIndex])
                     let picture = UIImage(named: "pic_profile.png")
                     var messageType = 0
                     var isTimeChanged = true
@@ -137,8 +137,8 @@ class MessengerViewController: UIViewController, UITextFieldDelegate {
                         var preDate = preItem.date
                         let splitPreDate = preDate.components(separatedBy: ",")
                         preDate = splitPreDate[0]
-                        let preTimeIndex = splitPreDate[1].index(splitPreDate[1].startIndex, offsetBy: 8)
-                        let preTime = splitPreDate[1][..<preTimeIndex].base
+                        let preTimeIndex = splitPreDate[1].index(splitPreDate[1].endIndex, offsetBy: -3)
+                        let preTime = String(splitPreDate[1][..<preTimeIndex])
                         
                         if preDate == date {
                             isDateChanged = false
@@ -183,7 +183,7 @@ class MessengerViewController: UIViewController, UITextFieldDelegate {
         for idx in 0..<idxArr.count {
             var temp: [ChatData] = [ChatData](repeating: ChatData(), count: datas.count + 1)
             if idxArr[idx]-1 > 0 {
-                for dataIdx in 0..<idxArr[idx]-1 {
+                for dataIdx in 0...idxArr[idx]-1 {
                     temp[dataIdx] = datas[dataIdx]
                 }
             }
@@ -196,6 +196,7 @@ class MessengerViewController: UIViewController, UITextFieldDelegate {
         }
         
         messengerTableView.reloadData()
+        scrollToBottom()
     }
     
     @objc func sendMessageGesture(_ sender: UITapGestureRecognizer){
@@ -262,6 +263,15 @@ class MessengerViewController: UIViewController, UITextFieldDelegate {
         }
     }
 
+    // 테이블 뷰 제일 아래로 이동
+    func scrollToBottom(){
+         DispatchQueue.main.async {
+            if self.datas.count > 0 {
+                let indexPath = IndexPath(row: self.datas.count-1, section: 0)
+                self.messengerTableView.scrollToRow(at: indexPath, at: .bottom, animated: false)
+            }
+         }
+     }
 }
 
 
@@ -272,12 +282,13 @@ extension MessengerViewController: UITableViewDataSource {
     
     // 행 정보 표시
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         // 데이터 가져오기
         let rowData:ChatData = datas[indexPath.row]
-
+        let splitPreDate = rowData.date.components(separatedBy: ",")
         if rowData.isDateView {
             let cell = tableView.dequeueReusableCell(withIdentifier: "MessengerDateCell", for: indexPath) as! MessengerDateCell
-            cell.lbDate.text = rowData.date
+            cell.lbDate.text = splitPreDate[0]
             
             return cell
         } else {
@@ -287,7 +298,10 @@ extension MessengerViewController: UITableViewDataSource {
                 cell.lbContent.text = rowData.message
                 
                 if rowData.isTimeChanged {
-                    cell.lbDate.text = rowData.date
+                    let preTimeIndex = splitPreDate[1].index(splitPreDate[1].endIndex, offsetBy: -3)
+                    let preTime = String(splitPreDate[1][..<preTimeIndex])
+                    
+                    cell.lbDate.text = preTime
                 } else {
                     cell.lbDate.text = ""
                 }
@@ -316,7 +330,9 @@ extension MessengerViewController: UITableViewDataSource {
                 cell.lbContent.text = rowData.message
                 
                 if rowData.isTimeChanged {
-                    cell.lbDate.text = rowData.date
+                    let preTimeIndex = splitPreDate[1].index(splitPreDate[1].endIndex, offsetBy: -3)
+                    let preTime = String(splitPreDate[1][..<preTimeIndex])
+                    cell.lbDate.text = preTime
                 } else {
                     cell.lbDate.text = ""
                 }
@@ -329,7 +345,12 @@ extension MessengerViewController: UITableViewDataSource {
 
 extension MessengerViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 80
+        if datas[indexPath.row].isDateView {
+            return 40
+        }
+        else {
+            return 80
+        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

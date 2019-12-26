@@ -178,7 +178,7 @@ class HomeViewController: UIViewController {
     
     // MARK: - Functions
     @objc func goCatePage(_ sender: UITapGestureRecognizer){
-        if let index = sender.view?.tag as? Int {
+        if let index = sender.view?.tag {
             selectedTitle = talentObjectList[index].getTitle()
             selectedCateCode = talentObjectList[index].getCateCode()
             self.performSegue(withIdentifier: "segueTalentList", sender: nil)
@@ -186,7 +186,6 @@ class HomeViewController: UIViewController {
     }
     
     @objc func dropDownButton(){
-        print("btn clicked")
         dropDown?.show()
     }
     
@@ -214,7 +213,6 @@ class HomeViewController: UIViewController {
 
         switch segue.identifier! {
         case "segueTalentList":
-            print("1q2w3e")
             let talentShareViewController = segue.destination as! TalentShareViewController
             talentShareViewController.cateCode = selectedCateCode
             talentShareViewController.titleName = selectedTitle
@@ -222,6 +220,7 @@ class HomeViewController: UIViewController {
             break
         case "segueTalentRegist":
             let talentRegistViewController = segue.destination as! TalentRegistViewController
+            talentRegistViewController.talentFlag = self.talentFlag
             break
         case "segueMenu":
             let sideMenuViewController = segue.destination as! SideMenuViewController
