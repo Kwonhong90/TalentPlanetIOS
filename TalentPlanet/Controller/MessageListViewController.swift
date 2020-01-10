@@ -21,6 +21,8 @@ class MessageListViewController: UIViewController {
     var selectedUserName: String?
     var nowDate: String!
     @IBOutlet var messengerListView: UITableView!
+    var isClaim: Bool = false
+    var didSelectClaimUser: ((_ tarUserID: String, _ tarUserName: String, _ sFilePath: String) -> Void)?
     
     // MARK: - Init
     override func viewDidLoad() {
@@ -165,11 +167,16 @@ extension MessageListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         messengerListView.deselectRow(at: indexPath, animated: true)
         let rowData:MessengerData = datas[indexPath.row]
-        selectedRoomID = rowData.roomID
-        selectedReceiverID = rowData.userID
-        selectedUserName = rowData.userName
-        
-        self.performSegue(withIdentifier: "segueChat", sender: nil)
+        if isClaim {
+            self.didSelectClaimUser!(rowData.userID, rowData.userName, rowData.profileImageUri)
+            self.dismiss(animated: true, completion: nil)
+        } else {
+            selectedRoomID = rowData.roomID
+            selectedReceiverID = rowData.userID
+            selectedUserName = rowData.userName
+            
+            self.performSegue(withIdentifier: "segueChat", sender: nil)
+        }
     }
 }
 

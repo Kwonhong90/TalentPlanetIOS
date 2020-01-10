@@ -8,6 +8,7 @@
 
 import UIKit
 import DropDown
+import Alamofire
 
 // MARK: - Talent Object
 class TalentObjectHome {
@@ -41,7 +42,7 @@ class TalentObjectHome {
     }
 }
 
-class HomeViewController: UIViewController {
+class HomeViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     
     // MARK: - Variables
     // stack view 담을 배열
@@ -77,12 +78,19 @@ class HomeViewController: UIViewController {
     
     @IBOutlet var naviItem: UINavigationItem!
     @IBOutlet var btnTitle: UIButton!
+    @IBOutlet var cvHotTalent: UICollectionView!
     // 카테고리 관련 객체를 담을 배열
     var talentObjectList:[TalentObjectHome] = []
     
     // 재능 리스트로 넘어갈 시 보낼 파라미터
     var selectedTitle = ""
     var selectedCateCode = ""
+    var selectedHashtag: String?
+    var isSearch:Bool = false
+    
+    var hotTalentImages = [UIImage(named:"pic_beauty.png"), UIImage(named: "pic_game.png"), UIImage(named: "pic_it.png"), UIImage(named: "pic_sports.png")]
+    
+    var hotTalentTags = ["#메이크업", "#롤", "#자바를자바라", "#풋살"]
     
     // MARK: - Init
     override func viewDidLoad() {
@@ -170,9 +178,48 @@ class HomeViewController: UIViewController {
                 button.tag = index
                 button.addGestureRecognizer(gesture)
                 index = index + 1
+            } else {
+                let searchGesture = SearchHashtagTapGestureRecognizer(target: self, action: #selector(goSearchHashTag(_:)))
+                button.addGestureRecognizer(searchGesture)
             }
         }
         delegate?.sendData(talentFlag: self.talentFlag)
+        
+        let addCateGestrue = SearchHashtagTapGestureRecognizer(target: self, action: #selector(goAddCate(_:)))
+        addCateView.isUserInteractionEnabled = true
+        addCateView.addGestureRecognizer(addCateGestrue)
+        
+        cvHotTalent.delegate = self
+        cvHotTalent.dataSource = self
+        
+        getHotTalent()
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+
+        switch segue.identifier! {
+        case "segueTalentList":
+            let talentShareViewController = segue.destination as! TalentShareViewController
+            talentShareViewController.cateCode = selectedCateCode
+            talentShareViewController.titleName = selectedTitle
+            talentShareViewController.talentFlag = self.talentFlag
+            talentShareViewController.isSearch = self.isSearch
+            talentShareViewController.searchHashTag = self.selectedHashtag
+            
+            break
+        case "segueTalentRegist":
+            let talentRegistViewController = segue.destination as! TalentRegistViewController
+            talentRegistViewController.talentFlag = self.talentFlag
+            break
+        case "segueMenu":
+            let sideMenuViewController = segue.destination as! SideMenuViewController
+            sideMenuViewController.talentFlag = self.talentFlag
+            print("asdfasdf")
+            break
+        default:
+            return
+        }
+        
     }
     
     
@@ -182,7 +229,18 @@ class HomeViewController: UIViewController {
             selectedTitle = talentObjectList[index].getTitle()
             selectedCateCode = talentObjectList[index].getCateCode()
             self.performSegue(withIdentifier: "segueTalentList", sender: nil)
+            self.isSearch = false
         }
+    }
+    
+    @objc func goSearchHashTag(_ sender: SearchHashtagTapGestureRecognizer) {
+        self.selectedHashtag = sender.hashtag
+        self.isSearch = true
+        self.performSegue(withIdentifier: "segueTalentList", sender: nil)
+    }
+    
+    @objc func goAddCate(_ sender: UITapGestureRecognizer) {
+        self.performSegue(withIdentifier: "segueAddCate", sender: nil)
     }
     
     @objc func dropDownButton(){
@@ -205,32 +263,6 @@ class HomeViewController: UIViewController {
         for label: UILabel in bottomLabels {
             label.textColor = color
         }
-    }
-    
-    // MARK: - Navigation
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
-        switch segue.identifier! {
-        case "segueTalentList":
-            let talentShareViewController = segue.destination as! TalentShareViewController
-            talentShareViewController.cateCode = selectedCateCode
-            talentShareViewController.titleName = selectedTitle
-            talentShareViewController.talentFlag = self.talentFlag
-            break
-        case "segueTalentRegist":
-            let talentRegistViewController = segue.destination as! TalentRegistViewController
-            talentRegistViewController.talentFlag = self.talentFlag
-            break
-        case "segueMenu":
-            let sideMenuViewController = segue.destination as! SideMenuViewController
-            sideMenuViewController.talentFlag = self.talentFlag
-            print("asdfasdf")
-            break
-        default:
-            return
-        }
-        
     }
     
     private func initNavigationItemTitleView(title: String) {
@@ -257,7 +289,68 @@ class HomeViewController: UIViewController {
         
     }
     
+    
+    // Hot Talent 관련 Collection View
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HotTalentCollectionViewCell", for: indexPath) as! HotTalentCollectionViewCell
+        
+        cell.ivBackground.image = hotTalentImages[indexPath.row]
+        cell.lbTitle.text = "#\(hotTalentTags[indexPath.row])"
+        
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width = self.view.frame.size.width / 3.0
+        let height = cvHotTalent.frame.height
+        return CGSize(width: width, height: height)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return hotTalentImages.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        self.isSearch = true
+        self.selectedHashtag = hotTalentTags[indexPath.row]
+        self.performSegue(withIdentifier: "segueTalentList", sender: nil)
+    }
 
+    func getHotTalent() {
+        let parameters = ["TalentFlag":self.talentFlag]
+        AF.request("http://175.213.4.39/Accepted/TalentSharing/getHotTags.do", method: .post, parameters:parameters)
+            .validate()
+            .responseJSON {
+                response in
+                var message:String
+                switch response.result {
+                case .success(let value):
+                    if let jsonArray = value as? [[String: Any]] {
+                        self.hotTalentImages = []
+                        self.hotTalentTags = []
+                        for json in jsonArray {
+                            let imageName = json["BackgroundID"] as! String
+                            print(imageName)
+                            self.hotTalentImages.append(UIImage(named: "\(imageName).png"))
+                            self.hotTalentTags.append(json["Tag"] as! String)
+                        }
+                    }
+                    
+                    self.cvHotTalent.reloadData()
+                case .failure(let error):
+                    print("Error in network \(error)")
+                    message = "서버 통신에 실패하였습니다. 관리자에게 문의해주시기 바랍니다."
+                    let alert = UIAlertController(title: "회원가입", message: message, preferredStyle: UIAlertController.Style.alert)
+                    let alertAction = UIAlertAction(title: "확인", style: UIAlertAction.Style.default, handler: nil)
+                    alert.addAction(alertAction)
+                    self.present(alert, animated: true, completion: nil)
+                }
+        }
+    }
 }
 
 extension UIImage {
@@ -316,6 +409,10 @@ extension UIView {
             return all
         }
     }
+
+class SearchHashtagTapGestureRecognizer: UITapGestureRecognizer {
+    var hashtag: String?
+}
 
 protocol SendTalentFlagDelegate {
     func sendData(talentFlag: String)

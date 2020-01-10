@@ -138,7 +138,14 @@
 		8BF9C74B2339E3EF00BE14FF /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF9C74A2339E3EF00BE14FF /* LoginViewController.swift */; };
 		8BF9C74D2339FBDD00BE14FF /* JoinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF9C74C2339FBDD00BE14FF /* JoinViewController.swift */; };
 		8BF9C74F2339FBEA00BE14FF /* FindViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF9C74E2339FBEA00BE14FF /* FindViewController.swift */; };
+		8D2F610D23C2CC9300C53649 /* PointSendCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2F610C23C2CC9300C53649 /* PointSendCell.swift */; };
+		8D2F610F23C2CCBF00C53649 /* PointRecvCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2F610E23C2CCBF00C53649 /* PointRecvCell.swift */; };
 		8D314E4B239E3D1D00376DD3 /* BaseTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D314E4A239E3D1D00376DD3 /* BaseTabBarController.swift */; };
+		8D5BA2C923C6BBB6005D3615 /* HotTalentCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5BA2C823C6BBB6005D3615 /* HotTalentCollectionViewCell.swift */; };
+		8D5BA2CB23C7105C005D3615 /* AddCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5BA2CA23C7105C005D3615 /* AddCategoryViewController.swift */; };
+		8D5BA2CD23C806DC005D3615 /* ClaimViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5BA2CC23C806DC005D3615 /* ClaimViewController.swift */; };
+		8DCB8A6723C321A300ACA431 /* PointViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCB8A6623C321A300ACA431 /* PointViewController.swift */; };
+		8DD3EB9223C4C96300E27376 /* PictureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD3EB9123C4C96300E27376 /* PictureViewController.swift */; };
 		8DFFBCAD23A714710094CBC2 /* icon_search_student.png in Resources */ = {isa = PBXBuildFile; fileRef = 8DFFBCAC23A714700094CBC2 /* icon_search_student.png */; };
 		EFAB57BDBF1FF9FAFEAF8485 /* Pods_TalentPlanet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF43478D555086FDD03DBCE2 /* Pods_TalentPlanet.framework */; };
 /* End PBXBuildFile section */
@@ -308,7 +315,14 @@
 		8BF9C74A2339E3EF00BE14FF /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		8BF9C74C2339FBDD00BE14FF /* JoinViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinViewController.swift; sourceTree = "<group>"; };
 		8BF9C74E2339FBEA00BE14FF /* FindViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindViewController.swift; sourceTree = "<group>"; };
+		8D2F610C23C2CC9300C53649 /* PointSendCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointSendCell.swift; sourceTree = "<group>"; };
+		8D2F610E23C2CCBF00C53649 /* PointRecvCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointRecvCell.swift; sourceTree = "<group>"; };
 		8D314E4A239E3D1D00376DD3 /* BaseTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTabBarController.swift; sourceTree = "<group>"; };
+		8D5BA2C823C6BBB6005D3615 /* HotTalentCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotTalentCollectionViewCell.swift; sourceTree = "<group>"; };
+		8D5BA2CA23C7105C005D3615 /* AddCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategoryViewController.swift; sourceTree = "<group>"; };
+		8D5BA2CC23C806DC005D3615 /* ClaimViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaimViewController.swift; sourceTree = "<group>"; };
+		8DCB8A6623C321A300ACA431 /* PointViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointViewController.swift; sourceTree = "<group>"; };
+		8DD3EB9123C4C96300E27376 /* PictureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictureViewController.swift; sourceTree = "<group>"; };
 		8DFFBCAC23A714700094CBC2 /* icon_search_student.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_search_student.png; sourceTree = "<group>"; };
 		AF43478D555086FDD03DBCE2 /* Pods_TalentPlanet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TalentPlanet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9867FB4E2C15EEC30BA8137 /* Pods-TalentPlanet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TalentPlanet.release.xcconfig"; path = "Target Support Files/Pods-TalentPlanet/Pods-TalentPlanet.release.xcconfig"; sourceTree = "<group>"; };
@@ -393,6 +407,10 @@
 				8B8430D1238E3D86003FF473 /* MessageListViewController.swift */,
 				8B47B540238F924900398606 /* MessengerViewController.swift */,
 				8D314E4A239E3D1D00376DD3 /* BaseTabBarController.swift */,
+				8DCB8A6623C321A300ACA431 /* PointViewController.swift */,
+				8DD3EB9123C4C96300E27376 /* PictureViewController.swift */,
+				8D5BA2CA23C7105C005D3615 /* AddCategoryViewController.swift */,
+				8D5BA2CC23C806DC005D3615 /* ClaimViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -407,6 +425,9 @@
 				8B47B53A238F91AA00398606 /* MessengerDateCell.swift */,
 				8B47B53C238F91C400398606 /* MessengerSendCell.swift */,
 				8B47B53E238F91D300398606 /* MessengerRecvCell.swift */,
+				8D2F610C23C2CC9300C53649 /* PointSendCell.swift */,
+				8D2F610E23C2CCBF00C53649 /* PointRecvCell.swift */,
+				8D5BA2C823C6BBB6005D3615 /* HotTalentCollectionViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -882,15 +903,20 @@
 				8BBF9F3E2355ABF90086C747 /* TalentShareCell.swift in Sources */,
 				8B53006923827CC600DC62CB /* FMDatabasePool.m in Sources */,
 				8B06084F23713ACE002F1AAE /* CommonFunctions.swift in Sources */,
+				8DD3EB9223C4C96300E27376 /* PictureViewController.swift in Sources */,
 				8BF9C5EA2339AA2D00BE14FF /* AppDelegate.swift in Sources */,
+				8D2F610F23C2CCBF00C53649 /* PointRecvCell.swift in Sources */,
 				8B47B53B238F91AA00398606 /* MessengerDateCell.swift in Sources */,
 				8B53006723827CC600DC62CB /* FMDatabaseAdditions.m in Sources */,
 				8B53006623827CC600DC62CB /* FMDatabaseQueue.m in Sources */,
 				8B47B541238F924900398606 /* MessengerViewController.swift in Sources */,
+				8D5BA2C923C6BBB6005D3615 /* HotTalentCollectionViewCell.swift in Sources */,
 				8B53006523827CC600DC62CB /* FMResultSet.m in Sources */,
 				8BF9C5EC2339AA2D00BE14FF /* SceneDelegate.swift in Sources */,
 				8B8430D2238E3D86003FF473 /* MessageListViewController.swift in Sources */,
 				8B53006823827CC600DC62CB /* FMDatabase.m in Sources */,
+				8D2F610D23C2CC9300C53649 /* PointSendCell.swift in Sources */,
+				8D5BA2CB23C7105C005D3615 /* AddCategoryViewController.swift in Sources */,
 				8BBF9F422357F8E50086C747 /* SideMenuViewController.swift in Sources */,
 				8B47B53D238F91C400398606 /* MessengerSendCell.swift in Sources */,
 				8B530048237E66FE00DC62CB /* NewTalentViewController.swift in Sources */,
@@ -900,6 +926,8 @@
 				8B17A711235DC59A00000575 /* MenuTableCell.swift in Sources */,
 				8BF9C74D2339FBDD00BE14FF /* JoinViewController.swift in Sources */,
 				8B0F67C22379211100E4AED1 /* TalentRegistCell.swift in Sources */,
+				8DCB8A6723C321A300ACA431 /* PointViewController.swift in Sources */,
+				8D5BA2CD23C806DC005D3615 /* ClaimViewController.swift in Sources */,
 				8B9FDA07236ACE790073C614 /* ProfileViewController.swift in Sources */,
 				8BF9C74F2339FBEA00BE14FF /* FindViewController.swift in Sources */,
 				8B06085123713FAC002F1AAE /* MapViewController.swift in Sources */,

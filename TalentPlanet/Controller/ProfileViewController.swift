@@ -19,6 +19,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     @IBOutlet var ivModify: UIImageView!
     @IBOutlet var ivDelete: UIImageView!
     @IBOutlet var ivMessage: UIImageView!
+    @IBOutlet var ivShare: UIImageView!
     @IBOutlet var ivMap: UIImageView!
     
     // 재능 관련 변수
@@ -85,13 +86,14 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         lbAddress.isUserInteractionEnabled = true
         lbAddress.addGestureRecognizer(mapGesture)
         
-        // 프로필 사진
-        let pictureTapGesture = UITapGestureRecognizer(target: self, action: #selector(getPicture(_:)))
-        ivUser.isUserInteractionEnabled = true
-        ivUser.addGestureRecognizer(pictureTapGesture)
         
         // 내 프로필인 경우만 변경 가능
         if self.userID == UserDefaults.standard.string(forKey: "userID") {
+            // 프로필 사진
+            let pictureTapGesture = UITapGestureRecognizer(target: self, action: #selector(getPicture(_:)))
+            ivUser.isUserInteractionEnabled = true
+            ivUser.addGestureRecognizer(pictureTapGesture)
+            
             // 생일 공개 여부
             let birthGesture = UITapGestureRecognizer(target: self, action: #selector(clickPublicFlag(_:)))
             ivPublicCheck.isUserInteractionEnabled = true
@@ -101,12 +103,22 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             let introGesture = UITapGestureRecognizer(target: self, action: #selector(modifyIntro(_:)))
             lbIntroduction.isUserInteractionEnabled = true
             lbIntroduction.addGestureRecognizer(introGesture)
+        } else {
+            // 프로필 사진
+            let pictureTapGesture = UITapGestureRecognizer(target: self, action: #selector(viewProfilePicture(_:)))
+            ivUser.isUserInteractionEnabled = true
+            ivUser.addGestureRecognizer(pictureTapGesture)
         }
         
         // 메신저 클릭
         let messageGesture = UITapGestureRecognizer(target: self, action: #selector(doChat(_:)))
         ivMessage.isUserInteractionEnabled = true
         ivMessage.addGestureRecognizer(messageGesture)
+        
+        // 공유 클릭
+        let shareGesture = UITapGestureRecognizer(target: self, action: #selector(doShare(_:)))
+        ivShare.isUserInteractionEnabled = true
+        ivShare.addGestureRecognizer(shareGesture)
         
         self.navigationController?.navigationBar.topItem?.title = ""
         
@@ -118,12 +130,13 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             userInfoView.backgroundColor = UIColor(red: 40.0/255.0, green: 54.0/255.0, blue: 74.0/255.0, alpha: 1.0)
             ivMessage.image = ivMessage.image?.maskWithColor(color: UIColor(red: 255.0/255.0, green: 195.0/255.0, blue: 94.0/255.0, alpha: 1.0))
             ivMap.image = ivMap.image?.maskWithColor(color: UIColor(red: 255.0/255.0, green: 195.0/255.0, blue: 94.0/255.0, alpha: 1.0))
-            
-            
+            ivShare.isHidden = true
         } else {
             userInfoView.backgroundColor = UIColor(red: 255.0/255.0, green: 195.0/255.0, blue: 94.0/255.0, alpha: 1.0)
             ivMessage.image = ivMessage.image?.maskWithColor(color: UIColor(red: 40.0/255.0, green: 54.0/255.0, blue: 74.0/255.0, alpha: 1.0))
             ivMap.image = ivMap.image?.maskWithColor(color: UIColor(red: 40.0/255.0, green: 54.0/255.0, blue: 74.0/255.0, alpha: 1.0))
+            ivShare.image = ivShare.image?.maskWithColor(color: UIColor(red: 40.0/255.0, green: 54.0/255.0, blue: 74.0/255.0, alpha: 1.0))
+            ivShare.isHidden = false
         }
 
     }
@@ -143,15 +156,27 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             messengerViewController.roomID = String(self.chatRoomID!)
             messengerViewController.userName = self.lbName.text!
             break
+        case "seguePoint":
+            let pointViewController = segue.destination as! PointViewController
+            pointViewController.mentorID = self.userID
+            pointViewController.menteeID = UserDefaults.standard.string(forKey: "userID")
+            pointViewController.isMentor = false
+            pointViewController.userName = self.lbName.text
+            break
+        case "segueProfilePicture":
+            let pictureViewController = segue.destination as! PictureViewController
+            pictureViewController.filePath = self.filePath
+            pictureViewController.userName = self.lbName.text
+            break
         default:
             return
         }
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        if self.titleText != nil {
-            self.initNavigationItemTitleView(title: self.titleText)
-        }
+//        if self.titleText != nil {
+//            self.initNavigationItemTitleView(title: self.titleText)
+//        }
     }
     
     // MARK: - Functions
@@ -166,9 +191,9 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                 case .success(let value):
                     let json = value as! [String:Any]
                     self.lbName.text = json["USER_NAME"] as? String
-                    self.filePath = json["S_FILE_PATH"] as? String
-                    if json["S_FILE_PATH"] as! String != "NODATA" {
-                        let path = json["S_FILE_PATH"] as! String
+                    self.filePath = json["FILE_PATH"] as? String
+                    if json["FILE_PATH"] as! String != "NODATA" {
+                        let path = json["FILE_PATH"] as! String
                         let url = URL(string: "http://13.209.191.97/Accepted/" + path)
                         self.ivUser.load(url: url!)
                     }
@@ -178,6 +203,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                         self.ivDelete.isHidden = true
                     } else {
                         self.ivMessage.isHidden = true
+                        self.ivShare.isHidden = true
                     }
                     
                     if json["GENDER"] as! String == "남" {
@@ -255,6 +281,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                 var message:String
                 switch response.result {
                 case .success(let value):
+                    self.dropDown = DropDown()
                     self.dropDownTitles = []
                     let jsonArray = value as! [[String:Any]]
                     if jsonArray.count == 0 {
@@ -317,7 +344,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                     }
 
 
-                    self.dropDown = DropDown()
+                    
                     self.dropDown?.dataSource = self.dropDownTitles!
                     self.dropDown?.selectionAction = { [unowned self] (index: Int, item: String) in
                         self.talentID = String(self.talentProfileList[index].talentID)
@@ -346,12 +373,11 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         titleView.font = UIFont(name: "HelveticaNeue-Medium", size: 17)
         let width = titleView.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)).width
         titleView.frame = CGRect(origin:CGPoint.zero, size:CGSize(width: width, height: 500))
-        
-        dropDown?.anchorView = titleView // UIView or UIBarButtonItem
-        dropDown?.bottomOffset = CGPoint(x: 0, y:(dropDown?.anchorView?.plainView.bounds.height)!)
-        // The list of items to display. Can be changed dynamically
+        dropDown!.anchorView = titleView
         
         self.navigationController?.navigationBar.topItem?.titleView = titleView
+        
+        //dropDown?.bottomOffset = CGPoint(x: 0, y:(dropDown?.anchorView?.plainView.bounds.height)!)
         
         let recognizer = UITapGestureRecognizer(target: self, action: #selector(dropDownButton))
         titleView.isUserInteractionEnabled = true
@@ -766,6 +792,16 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             self.chatRoomID = roomID
             self.performSegue(withIdentifier: "segueMessenger", sender: nil)
         }
+    }
+    
+    // 공유 창 띄우기
+    @objc func doShare(_ sender: UITapGestureRecognizer) {
+        self.performSegue(withIdentifier: "seguePoint", sender: nil)
+    }
+    
+    // 프로필 사진 확대
+    @objc func viewProfilePicture(_ sender: UITapGestureRecognizer) {
+        self.performSegue(withIdentifier: "segueProfilePicture", sender: nil)
     }
 }
 

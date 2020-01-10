@@ -16,6 +16,9 @@ class TalentShareViewController: UIViewController{
     var datas:[TalentListData] = []
     var titleName = ""
     var cateCode = ""
+    var isSearch: Bool = false
+    var searchHashTag: String?
+    var tfHashtag: UITextField?
     @IBOutlet var sharingTableView: UITableView!
     
     // 프로필로 전달할 변수
@@ -28,28 +31,49 @@ class TalentShareViewController: UIViewController{
     // MARK: - Init
     override func viewDidLoad() {
         super.viewDidLoad()
-        getTalentList()
 
         sharingTableView.delegate = self
         sharingTableView.dataSource = self
-        // Do any additional setup after loading the view.
-        self.title = titleName
+        
+        if isSearch {
+            initNavigationItemTitleView()
+            if searchHashTag != nil {
+                tfHashtag!.text = searchHashTag
+                getTalentList()
+            }
+        } else {
+            getTalentList()
+            self.title = titleName
+        }
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+        switch segue.identifier! {
+        case "segueProfile":
+            let profileViewContorller = segue.destination as! ProfileViewController
+            profileViewContorller.talentFlag = self.selectedTalentFlag
+            profileViewContorller.userID = self.selectedUserID
+            profileViewContorller.talentID = self.selectedTalentID
+            profileViewContorller.cateCode = self.cateCode
+            profileViewContorller.titleText = self.titleName
+        default:
+            return
+        }
     }
-    */
     
     // MARK: - Functions
     func getTalentList(){
-        AF.request("http://175.213.4.39/Accepted/TalentSharing/getTalentListNew.do", method: .post, parameters:["UserID":"mkh9012@naver.co", "CateCode":cateCode, "TalentFlag":self.talentFlag])
+        var params: [String:Any]!
+        var url: String!
+        if isSearch {
+            params = ["UserID":"mkh9012@naver.co", "Hashtag": self.tfHashtag!.text!, "TalentFlag":self.talentFlag]
+            url = "searchTalentListByHashtag.do"
+        } else {
+            params = ["UserID":"mkh9012@naver.co", "CateCode":cateCode, "TalentFlag":self.talentFlag]
+            url = "getTalentListNew.do"
+        }
+        AF.request("http://175.213.4.39/Accepted/TalentSharing/\(String(describing: url!))", method: .post,
+                   parameters:params)
             .validate()
             .responseJSON {
                 response in
@@ -95,21 +119,33 @@ class TalentShareViewController: UIViewController{
         }
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        switch segue.identifier! {
-        case "segueProfile":
-            let profileViewContorller = segue.destination as! ProfileViewController
-            profileViewContorller.talentFlag = self.selectedTalentFlag
-            profileViewContorller.userID = self.selectedUserID
-            profileViewContorller.talentID = self.selectedTalentID
-            profileViewContorller.cateCode = self.cateCode
-            profileViewContorller.titleText = self.titleName
-        default:
-            return
+    // 타이틀 초기화
+    private func initNavigationItemTitleView() {
+        
+        let searchBtn = UIBarButtonItem(image: UIImage(), style: .plain, target: self, action: #selector(searchHashtag))
+        if talentFlag == "Y" {
+            searchBtn.image = UIImage(named: "icon_search_teacher.png")
+        } else {
+            searchBtn.image = UIImage(named: "icon_search_student.png")
         }
+        
+        //let searchHashtagGesture = UITapGestureRecognizer(target: self, action: #selector(searchHashtag(_:)))
+        //searchBtn.action = #selector(searchHashtag(_:))
+        self.navigationItem.rightBarButtonItem = searchBtn
+        let titleView = UITextField()
+        titleView.placeholder = "해시태그 검색"
+        titleView.font = UIFont(name: "HelveticaNeue-Medium", size: 17)
+        let width = titleView.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)).width
+        titleView.frame = CGRect(origin:CGPoint.zero, size:CGSize(width: width, height: 500))
+        
+        self.tfHashtag = titleView
+        self.navigationItem.titleView = titleView
     }
 
-
+    @objc func searchHashtag() {
+        print(1212)
+        getTalentList()
+    }
 }
 
 extension TalentShareViewController: UITableViewDataSource {

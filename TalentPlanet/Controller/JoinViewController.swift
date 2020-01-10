@@ -75,6 +75,12 @@ class JoinViewController: UIViewController {
         
         // 핸드폰인증 textfield 변경 감지
         tfPhoneCert.addTarget(self, action: #selector(JoinViewController.chgPhoneCertTextField(_:)), for: UIControl.Event.editingChanged)
+        
+        // 스크롤 뷰 키보드 가리는건 Tap Gesture 추가 필요함
+        let keyboardHideGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard(_:)))
+        self.mainView.isUserInteractionEnabled = true
+        self.mainView.addGestureRecognizer(keyboardHideGesture)
+
     }
     
     // 뷰 보여질때
@@ -97,7 +103,21 @@ class JoinViewController: UIViewController {
 
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?){
+        print(1)
+          self.view.endEditing(true)
+    }
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
     // MARK: - Functions
+    @objc func hideKeyboard(_ sender: UITapGestureRecognizer) {
+        self.view.endEditing(true)
+    }
+    
     // 아이디 중복 확인
     @IBAction func btnCheckID(_ sender: UIButton) {
         
@@ -278,7 +298,7 @@ class JoinViewController: UIViewController {
         return NSPredicate(format: "SELF MATCHES %@", regex).evaluate(with: candidate)
     }
     
-    // 생년월일 확인 정규식
+    // 이메일 확인 정규식
     func validateEmail(candidate: String) -> Bool {
         let regex = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$"
         return NSPredicate(format: "SELF MATCHES %@", regex).evaluate(with: candidate)

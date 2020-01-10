@@ -14,6 +14,7 @@ import Alamofire
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     let gcmMessageIDKey: String = "gcm.message_id"
+    let fcmDataKey: String = "datas"
     let dbName = "/accepted.db"
     var window: UIWindow? = UIWindow()
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -178,22 +179,96 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any],
                      fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-      // If you are receiving a notification message while your app is in the background,
-      // this callback will not be fired till the user taps on the notification launching the application.
-      // TODO: Handle data of notification
+        // If you are receiving a notification message while your app is in the background,
+        // this callback will not be fired till the user taps on the notification launching the application.
+        // TODO: Handle data of notification
 
-      // With swizzling disabled you must let Messaging know about the message, for Analytics
-      // Messaging.messaging().appDidReceiveMessage(userInfo)
+        // With swizzling disabled you must let Messaging know about the message, for Analytics
+        // Messaging.messaging().appDidReceiveMessage(userInfo)
 
-      // Print message ID.
-      if let messageID = userInfo[gcmMessageIDKey] {
+        // Print message ID.
+        if let messageID = userInfo[gcmMessageIDKey] {
         print("Message ID1: \(messageID)")
-      }
+        }
 
-      // Print full message.
-      print(userInfo)
+//        if let notificationData = userInfo[fcmDataKey] as? NSString {
+//            print(notificationData)
+//            var dictionary : NSDictionary?
+//            if let data = notificationData.data(using: String.Encoding.utf8.rawValue) {
+//                do {
+//                    dictionary = try JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary
+//                    print(dictionary)
+//                    if let type = dictionary!["type"] as? String {
+//                        if type == "Message" {
+//                            print("isMessage")
+//                        }
+//                    }
+//                } catch let error as NSError {
+//                    print("Error: \(error)")
+//                }
+//            }
+//        }
+        
+        if let type = userInfo["type"] as? String{
+            if type == "Message" {
+                if let dataString = userInfo["datas"] as? NSString {
+                    do {
+                        let datas = try JSONSerialization.jsonObject(with: dataString.data(using: String.Encoding.utf8.rawValue)!, options: []) as! [String:Any]
+                        
+                        let userID = datas["USER_ID"] as! String
+                        let userName = datas["USER_NAME"] as! String
+                        let sFilePath = datas["S_FILE_PATH"] as! String
+                        let messageID = datas["MESSAGE_ID"] as! Int
+                        let receiverID = datas["RECEIVER_ID"] as! String
+                        let content = datas["CONTENT"] as! String
+                        let creationDate = datas["CREATION_DATE_STRING"] as! String
+                        let pointMsgFlag = datas["POINT_MSG_FLAG"] as! String
+                        let roomID = CommonFunctions().makeChatRoom(userID: userID, userName: userName, filePath: sFilePath)
+                        
+                        if roomID > 0 {
+                            let insertSql = """
+                                                INSERT INTO TB_CHAT_LOG(MESSAGE_ID, ROOM_ID, MASTER_ID, USER_ID, CONTENT, CREATION_DATE, POINT_MSG_FLAG)
+                                                VALUES (\(messageID), \(roomID), '\(receiverID)', '\(userID)', '\(content)', '\(creationDate)', '\(pointMsgFlag)')
+                                            """
+                            
+                            print(insertSql)
+                            
+                            let dirPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+                            
+                            let docsDir = dirPaths[0] as String
+                            
+                            let databasesPath = docsDir.appending(dbName)
+                            let acceptedDB = FMDatabase(path: databasesPath)
+                            
+                            if acceptedDB.open() {
+                                let result = acceptedDB.executeUpdate(insertSql, withArgumentsIn: [])
+                                
+                                if result {
+                                    
+                                    let rootVC = UIApplication.shared.windows.first!.rootViewController as? UINavigationController
 
-      completionHandler(UIBackgroundFetchResult.newData)
+                                    if let topViewController = rootVC?.visibleViewController as? MessengerViewController {
+                                        topViewController.getChatList()
+                                    }
+                                } else {
+                                    print("ERROR : INSERT MESSAGE")
+                                }
+                                
+                                acceptedDB.close()
+                            }
+                        }
+                        
+                    } catch {
+                        
+                    }
+                }
+            }
+        }
+
+        // Print full message.
+        print(userInfo)
+
+        completionHandler(UIBackgroundFetchResult.newData)
     }
 }
 
@@ -256,7 +331,9 @@ extension AppDelegate: MessagingDelegate {
         print("Firebase registration token: \(fcmToken)")
         
         let dataDict:[String: String] = ["token": fcmToken]
-        saveFcmToken(token: fcmToken)
+        //saveFcmToken(token: fcmToken)
+        UserDefaults.standard.set(fcmToken, forKey: "fcmToken")
+        
         NotificationCenter.default.post(name: Notification.Name("FCMToken"), object: nil, userInfo: dataDict)
     }
     

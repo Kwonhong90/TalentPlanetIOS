@@ -21,7 +21,7 @@ class MessengerViewController: UIViewController, UITextFieldDelegate {
     var filemgr: FileManager!
     var roomID = ""
     var lastMessageID = 0
-    
+    var selectedMessageID = 0
 
     var receiverID = ""
     var userName = ""
@@ -46,6 +46,23 @@ class MessengerViewController: UIViewController, UITextFieldDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
 
         getChatList()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        getChatList()
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        switch segue.identifier {
+        case "seguePoint":
+            let pointViewController = segue.destination as! PointViewController
+            pointViewController.isMentor = true
+            pointViewController.mentorID = UserDefaults.standard.string(forKey: "userID")
+            pointViewController.menteeID = self.receiverID
+            pointViewController.messageID = self.selectedMessageID
+        default:
+            return
+        }
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -213,7 +230,7 @@ class MessengerViewController: UIViewController, UITextFieldDelegate {
     func sendMessage(_ content: String) {
         let today = Date()
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd,a hh:mm:ss"
+        dateFormatter.dateFormat = "yyyy/MM/dd,a hh:mm:ss"
 
         let nowDate = dateFormatter.string(from: today)
         AF.request("http://175.213.4.39/Accepted/Chat/sendMessage.do", method: .post, parameters:["senderID":UserDefaults.standard.string(forKey: "userID")!, "receiverID":self.receiverID, "content":content, "sendDate":nowDate])
@@ -246,6 +263,7 @@ class MessengerViewController: UIViewController, UITextFieldDelegate {
                                 }
                             }
                             
+                            acceptedDB.close()
                         } else {
                             print("메세지 전송 실패")
                         }
@@ -289,57 +307,118 @@ extension MessengerViewController: UITableViewDataSource {
         if rowData.isDateView {
             let cell = tableView.dequeueReusableCell(withIdentifier: "MessengerDateCell", for: indexPath) as! MessengerDateCell
             cell.lbDate.text = splitPreDate[0]
-            
+
             return cell
         } else {
             if rowData.messageType == 1 {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "MessengerSendCell", for: indexPath) as! MessengerSendCell
                 
-                cell.lbContent.text = rowData.message
-                
-                if rowData.isTimeChanged {
-                    let preTimeIndex = splitPreDate[1].index(splitPreDate[1].endIndex, offsetBy: -3)
-                    let preTime = String(splitPreDate[1][..<preTimeIndex])
+                if rowData.isPointSend {
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "PointSendCell", for: indexPath) as! PointSendCell
                     
-                    cell.lbDate.text = preTime
+                    if rowData.isTimeChanged {
+                        let preTimeIndex = splitPreDate[1].index(splitPreDate[1].endIndex, offsetBy: -3)
+                        let preTime = String(splitPreDate[1][..<preTimeIndex])
+                        cell.lbDate.text = preTime
+                    } else {
+                        cell.lbDate.text = ""
+                    }
+                    return cell
                 } else {
-                    cell.lbDate.text = ""
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "MessengerSendCell", for: indexPath) as! MessengerSendCell
+                    
+                    cell.lbContent.text = rowData.message
+                    
+                    if rowData.isTimeChanged {
+                        let preTimeIndex = splitPreDate[1].index(splitPreDate[1].endIndex, offsetBy: -3)
+                        let preTime = String(splitPreDate[1][..<preTimeIndex])
+                        
+                        cell.lbDate.text = preTime
+                    } else {
+                        cell.lbDate.text = ""
+                    }
+                    
+                    return cell
                 }
-                
-                return cell
             } else {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "MessengerRecvCell", for: indexPath) as! MessengerRecvCell
-                
-                // 프사 동그랗게 만들기
-                cell.ivUser.layer.cornerRadius = cell.ivUser.frame.size.height / 2
-                cell.ivUser.layer.masksToBounds = true
-                cell.ivUser.layer.borderWidth = 0
-                
-                // 프사 있는지 없는지 확인
-                cell.ivUser.image = rowData.picture
-                cell.lbName.text = rowData.targetName
-                
-                if rowData.isPicture {
-                    cell.ivUser.isHidden = false
-                    cell.lbName.isHidden = false
+                if rowData.isPointSend {
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "PointRecvCell", for: indexPath) as! PointRecvCell
+                    
+                    // 포인트 받은 경우가 아니면 포인트 받기 버튼 이벤트
+                    if !rowData.isCompleted {
+                        let pointGestrue = MessageTapGestureRecognizer(target: self, action: #selector(recvPoint(_:)))
+                        pointGestrue.messageID = rowData.messageID
+                        cell.ivPoint.isUserInteractionEnabled = true
+                        cell.ivPoint.addGestureRecognizer(pointGestrue)
+                    }
+                    // 프사 동그랗게 만들기
+                    cell.ivUser.layer.cornerRadius = cell.ivUser.frame.size.height / 2
+                    cell.ivUser.layer.masksToBounds = true
+                    cell.ivUser.layer.borderWidth = 0
+                    
+                    // 프사 있는지 없는지 확인
+                    cell.ivUser.image = rowData.picture
+                    cell.lbName.text = rowData.targetName
+                    
+                    if rowData.isPicture {
+                        cell.ivUser.isHidden = false
+                        cell.lbName.isHidden = false
+                    } else {
+                        cell.ivUser.isHidden = true
+                        cell.lbName.isHidden = true
+                    }
+                    
+                    if rowData.isTimeChanged {
+                        let preTimeIndex = splitPreDate[1].index(splitPreDate[1].endIndex, offsetBy: -3)
+                        let preTime = String(splitPreDate[1][..<preTimeIndex])
+                        cell.lbDate.text = preTime
+                    } else {
+                        cell.lbDate.text = ""
+                    }
+                    
+                    return cell
                 } else {
-                    cell.ivUser.isHidden = true
-                    cell.lbName.isHidden = true
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "MessengerRecvCell", for: indexPath) as! MessengerRecvCell
+                    
+                    // 프사 동그랗게 만들기
+                    cell.ivUser.layer.cornerRadius = cell.ivUser.frame.size.height / 2
+                    cell.ivUser.layer.masksToBounds = true
+                    cell.ivUser.layer.borderWidth = 0
+                    
+                    // 프사 있는지 없는지 확인
+                    cell.ivUser.image = rowData.picture
+                    cell.lbName.text = rowData.targetName
+                    
+                    if rowData.isPicture {
+                        cell.ivUser.isHidden = false
+                        cell.lbName.isHidden = false
+                    } else {
+                        cell.ivUser.isHidden = true
+                        cell.lbName.isHidden = true
+                    }
+                    
+                    cell.lbContent.text = rowData.message
+                    
+                    if rowData.isTimeChanged {
+                        let preTimeIndex = splitPreDate[1].index(splitPreDate[1].endIndex, offsetBy: -3)
+                        let preTime = String(splitPreDate[1][..<preTimeIndex])
+                        cell.lbDate.text = preTime
+                    } else {
+                        cell.lbDate.text = ""
+                    }
+                    
+                    return cell
                 }
-                
-                cell.lbContent.text = rowData.message
-                
-                if rowData.isTimeChanged {
-                    let preTimeIndex = splitPreDate[1].index(splitPreDate[1].endIndex, offsetBy: -3)
-                    let preTime = String(splitPreDate[1][..<preTimeIndex])
-                    cell.lbDate.text = preTime
-                } else {
-                    cell.lbDate.text = ""
-                }
-                
-                return cell
             }
         }
+    }
+    
+    @objc func recvPoint(_ sender: MessageTapGestureRecognizer) {
+        self.selectedMessageID = sender.messageID
+        self.performSegue(withIdentifier: "seguePoint", sender: nil)
+    }
+    
+    @objc func roundValue(_ sender: UISlider) {
+        sender.value = round(sender.value)
     }
 }
 
@@ -347,8 +426,9 @@ extension MessengerViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if datas[indexPath.row].isDateView {
             return 40
-        }
-        else {
+        } else if datas[indexPath.row].isPointSend {
+            return 400
+        } else {
             return 80
         }
     }
@@ -359,6 +439,10 @@ extension MessengerViewController: UITableViewDelegate {
 
 //        self.performSegue(withIdentifier: "segueProfile", sender: nil)
     }
+}
+
+class MessageTapGestureRecognizer: UITapGestureRecognizer {
+    var messageID: Int!
 }
 
 class ChatData {

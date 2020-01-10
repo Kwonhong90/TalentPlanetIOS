@@ -7,14 +7,23 @@
 //
 
 import UIKit
+import Alamofire
 
 class SideMenuViewController: UIViewController {
         
     // MARK: - Variables
     var talentFlag = ""
-    var images = ["icon_dl_profile.png", "icon_dl_condition.png", "icon_dl_friend.png", "icon_claim.png", "icon_dl_logout.png"]
-    var titles = ["내 프로필", "재능등록", "친구목록", "신고하기", "로그아웃"]
-    @IBOutlet var tableView: UITableView!    
+//    var images = ["icon_dl_profile.png", "icon_dl_condition.png", "icon_dl_friend.png", "icon_claim.png", "icon_dl_logout.png"]
+//    var titles = ["내 프로필", "재능등록", "친구목록", "신고하기", "로그아웃"]
+    var images = ["icon_dl_profile.png", "icon_dl_condition.png", "icon_claim.png", "icon_dl_logout.png"]
+    var titles = ["내 프로필", "재능등록", "신고하기", "로그아웃"]
+
+    @IBOutlet var tableView: UITableView!
+    
+    @IBOutlet var lbName: UILabel!
+    @IBOutlet var lbID: UILabel!
+    @IBOutlet var lbPoint: UILabel!
+    @IBOutlet var ivUser: UIImageView!
     
     // MARK: - Init
     override func viewDidLoad() {
@@ -24,12 +33,47 @@ class SideMenuViewController: UIViewController {
         print(self.talentFlag)
         tableView.delegate = self
         tableView.dataSource = self
+        lbID.text = UserDefaults.standard.string(forKey: "userID")
+        
     }
     
-    // MARK: - Functions
     override func viewWillAppear(_ animated: Bool) {
         let tabbar = self.tabBarController as! BaseTabBarController
         self.talentFlag = tabbar.talentFlag
+        getUserInfo()
+    }
+    // MARK: - Functions
+
+    func getUserInfo() {
+        AF.request("http://175.213.4.39/Accepted/Profile/getMyProfileInfo_new.do", method: .post, parameters:["userID":UserDefaults.standard.string(forKey: "userID")!])
+            .validate()
+            .responseJSON {
+                response in
+                var message:String
+                switch response.result {
+                case .success(let value):
+                    let data = value as! [String:Any]
+                    self.lbName.text = data["USER_NAME"] as! String
+                    self.lbPoint.text = "사용가능 포인트 \(data["TALENT_POINT"]!)P"
+                    
+                    if data["FILE_PATH"] as! String != "NODATA" {
+                        let url = URL(string: "http://13.209.191.97/Accepted/" + (data["FILE_PATH"] as! String))
+                        self.ivUser.load(url: url!)
+                    } else {
+                        self.ivUser.image = UIImage(named: "pic_profile.png")
+                    }
+                    
+                    
+                    
+                case .failure(let error):
+                    print("Error in network \(error)")
+                    message = "서버 통신에 실패하였습니다. 관리자에게 문의해주시기 바랍니다."
+                    let alert = UIAlertController(title: "아이디 중복확인", message: message, preferredStyle: UIAlertController.Style.alert)
+                    let alertAction = UIAlertAction(title: "확인", style: UIAlertAction.Style.default, handler: nil)
+                    alert.addAction(alertAction)
+                    self.present(alert, animated: true, completion: nil)
+                }
+        }
     }
     // MARK: - Navigation
 
@@ -44,6 +88,9 @@ class SideMenuViewController: UIViewController {
             let profileViewController = segue.destination as! ProfileViewController
             profileViewController.userID = UserDefaults.standard.string(forKey: "userID")!
             profileViewController.talentFlag = self.talentFlag
+        case "segueLogout":
+            let joinViewController = segue.destination as! JoinViewController
+            
         default:
             break
         }
@@ -71,11 +118,35 @@ extension SideMenuViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         switch indexPath.row {
-            case 0: self.performSegue(withIdentifier: "segueProfile", sender: nil)
-            case 1: self.performSegue(withIdentifier: "segueTalentCate", sender: nil)
-            case 2: self.performSegue(withIdentifier: "segueFriend", sender: nil)
-            case 3: self.performSegue(withIdentifier: "segueClaim", sender: nil)
-            case 4: self.performSegue(withIdentifier: "segueLogout", sender: nil)
+//            case 0:
+//                self.performSegue(withIdentifier: "segueProfile", sender: nil)
+//                break
+//            case 1:
+//                self.performSegue(withIdentifier: "segueTalentCate", sender: nil)
+//                break
+//            case 2:
+//                self.performSegue(withIdentifier: "segueFriend", sender: nil)
+//                break
+//            case 3:
+//                self.performSegue(withIdentifier: "segueClaim", sender: nil)
+//                break
+//            case 4:
+//                self.navigationController?.popToRootViewController(animated: true)
+//                UserDefaults.standard.removeObject(forKey: "userID")
+//                break
+            case 0:
+                self.performSegue(withIdentifier: "segueProfile", sender: nil)
+                break
+            case 1:
+                self.performSegue(withIdentifier: "segueTalentCate", sender: nil)
+                break
+            case 2:
+                self.performSegue(withIdentifier: "segueClaim", sender: nil)
+                break
+            case 3:
+                self.navigationController?.popToRootViewController(animated: true)
+                UserDefaults.standard.removeObject(forKey: "userID")
+                break
         default:
             return
         }
