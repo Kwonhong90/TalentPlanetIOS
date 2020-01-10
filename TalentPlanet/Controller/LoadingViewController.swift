@@ -17,7 +17,7 @@ class LoadingViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-
+        print(1)
     }
     
     // MARK: - Functions
