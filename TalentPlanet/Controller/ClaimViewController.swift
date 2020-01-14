@@ -138,7 +138,7 @@ class ClaimViewController: UIViewController, UITextViewDelegate {
                             alert.addAction(alertAction)
                             self.present(alert, animated: true, completion: nil)
                         } else {
-                            message = "신고신청 실패하였습니다. 관리자에게 문의해주시기 바랍니다."
+                            message = "신고하기가 실패하였습니다. 관리자에게 문의해주시기 바랍니다."
                             let alert = UIAlertController(title: "신고 실패", message: message, preferredStyle: UIAlertController.Style.alert)
                             let alertAction = UIAlertAction(title: "확인", style: UIAlertAction.Style.default, handler: nil)
                             alert.addAction(alertAction)

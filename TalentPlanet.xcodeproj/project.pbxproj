@@ -144,6 +144,15 @@
 		8D5BA2C923C6BBB6005D3615 /* HotTalentCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5BA2C823C6BBB6005D3615 /* HotTalentCollectionViewCell.swift */; };
 		8D5BA2CB23C7105C005D3615 /* AddCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5BA2CA23C7105C005D3615 /* AddCategoryViewController.swift */; };
 		8D5BA2CD23C806DC005D3615 /* ClaimViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5BA2CC23C806DC005D3615 /* ClaimViewController.swift */; };
+		8D5BA2CF23C84EAE005D3615 /* CustomerCenterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5BA2CE23C84EAE005D3615 /* CustomerCenterViewController.swift */; };
+		8D5BA2D123C84ED3005D3615 /* CustomerCenterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5BA2D023C84ED3005D3615 /* CustomerCenterCell.swift */; };
+		8D5BA2D323CBFE3A005D3615 /* NoticeListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5BA2D223CBFE3A005D3615 /* NoticeListViewController.swift */; };
+		8D5BA2D523CBFE45005D3615 /* NoticeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5BA2D423CBFE45005D3615 /* NoticeViewController.swift */; };
+		8D5BA2D723CBFE54005D3615 /* QnAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5BA2D623CBFE54005D3615 /* QnAViewController.swift */; };
+		8D5BA2D923CBFE5B005D3615 /* ClaimListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5BA2D823CBFE5B005D3615 /* ClaimListViewController.swift */; };
+		8D5BA2DB23CBFE6D005D3615 /* WithdrawalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5BA2DA23CBFE6D005D3615 /* WithdrawalViewController.swift */; };
+		8D5BA2DD23CC017A005D3615 /* NoticeListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5BA2DC23CC017A005D3615 /* NoticeListCell.swift */; };
+		8D5BA2DF23CC4745005D3615 /* ClaimListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5BA2DE23CC4745005D3615 /* ClaimListCell.swift */; };
 		8DCB8A6723C321A300ACA431 /* PointViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCB8A6623C321A300ACA431 /* PointViewController.swift */; };
 		8DD3EB9223C4C96300E27376 /* PictureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD3EB9123C4C96300E27376 /* PictureViewController.swift */; };
 		8DFFBCAD23A714710094CBC2 /* icon_search_student.png in Resources */ = {isa = PBXBuildFile; fileRef = 8DFFBCAC23A714700094CBC2 /* icon_search_student.png */; };
@@ -321,6 +330,15 @@
 		8D5BA2C823C6BBB6005D3615 /* HotTalentCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotTalentCollectionViewCell.swift; sourceTree = "<group>"; };
 		8D5BA2CA23C7105C005D3615 /* AddCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategoryViewController.swift; sourceTree = "<group>"; };
 		8D5BA2CC23C806DC005D3615 /* ClaimViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaimViewController.swift; sourceTree = "<group>"; };
+		8D5BA2CE23C84EAE005D3615 /* CustomerCenterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerCenterViewController.swift; sourceTree = "<group>"; };
+		8D5BA2D023C84ED3005D3615 /* CustomerCenterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerCenterCell.swift; sourceTree = "<group>"; };
+		8D5BA2D223CBFE3A005D3615 /* NoticeListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListViewController.swift; sourceTree = "<group>"; };
+		8D5BA2D423CBFE45005D3615 /* NoticeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeViewController.swift; sourceTree = "<group>"; };
+		8D5BA2D623CBFE54005D3615 /* QnAViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QnAViewController.swift; sourceTree = "<group>"; };
+		8D5BA2D823CBFE5B005D3615 /* ClaimListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaimListViewController.swift; sourceTree = "<group>"; };
+		8D5BA2DA23CBFE6D005D3615 /* WithdrawalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithdrawalViewController.swift; sourceTree = "<group>"; };
+		8D5BA2DC23CC017A005D3615 /* NoticeListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListCell.swift; sourceTree = "<group>"; };
+		8D5BA2DE23CC4745005D3615 /* ClaimListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaimListCell.swift; sourceTree = "<group>"; };
 		8DCB8A6623C321A300ACA431 /* PointViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointViewController.swift; sourceTree = "<group>"; };
 		8DD3EB9123C4C96300E27376 /* PictureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictureViewController.swift; sourceTree = "<group>"; };
 		8DFFBCAC23A714700094CBC2 /* icon_search_student.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_search_student.png; sourceTree = "<group>"; };
@@ -411,6 +429,12 @@
 				8DD3EB9123C4C96300E27376 /* PictureViewController.swift */,
 				8D5BA2CA23C7105C005D3615 /* AddCategoryViewController.swift */,
 				8D5BA2CC23C806DC005D3615 /* ClaimViewController.swift */,
+				8D5BA2CE23C84EAE005D3615 /* CustomerCenterViewController.swift */,
+				8D5BA2D223CBFE3A005D3615 /* NoticeListViewController.swift */,
+				8D5BA2D423CBFE45005D3615 /* NoticeViewController.swift */,
+				8D5BA2D623CBFE54005D3615 /* QnAViewController.swift */,
+				8D5BA2D823CBFE5B005D3615 /* ClaimListViewController.swift */,
+				8D5BA2DA23CBFE6D005D3615 /* WithdrawalViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -428,6 +452,9 @@
 				8D2F610C23C2CC9300C53649 /* PointSendCell.swift */,
 				8D2F610E23C2CCBF00C53649 /* PointRecvCell.swift */,
 				8D5BA2C823C6BBB6005D3615 /* HotTalentCollectionViewCell.swift */,
+				8D5BA2D023C84ED3005D3615 /* CustomerCenterCell.swift */,
+				8D5BA2DC23CC017A005D3615 /* NoticeListCell.swift */,
+				8D5BA2DE23CC4745005D3615 /* ClaimListCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -898,6 +925,7 @@
 			files = (
 				8B0F67C02379200800E4AED1 /* TalentRegistViewController.swift in Sources */,
 				8B8430D4238E3E0D003FF473 /* MessengerListCell.swift in Sources */,
+				8D5BA2D123C84ED3005D3615 /* CustomerCenterCell.swift in Sources */,
 				8D314E4B239E3D1D00376DD3 /* BaseTabBarController.swift in Sources */,
 				8BF9C5EE2339AA2D00BE14FF /* ViewController.swift in Sources */,
 				8BBF9F3E2355ABF90086C747 /* TalentShareCell.swift in Sources */,
@@ -905,13 +933,18 @@
 				8B06084F23713ACE002F1AAE /* CommonFunctions.swift in Sources */,
 				8DD3EB9223C4C96300E27376 /* PictureViewController.swift in Sources */,
 				8BF9C5EA2339AA2D00BE14FF /* AppDelegate.swift in Sources */,
+				8D5BA2DB23CBFE6D005D3615 /* WithdrawalViewController.swift in Sources */,
 				8D2F610F23C2CCBF00C53649 /* PointRecvCell.swift in Sources */,
 				8B47B53B238F91AA00398606 /* MessengerDateCell.swift in Sources */,
 				8B53006723827CC600DC62CB /* FMDatabaseAdditions.m in Sources */,
+				8D5BA2DD23CC017A005D3615 /* NoticeListCell.swift in Sources */,
 				8B53006623827CC600DC62CB /* FMDatabaseQueue.m in Sources */,
+				8D5BA2CF23C84EAE005D3615 /* CustomerCenterViewController.swift in Sources */,
 				8B47B541238F924900398606 /* MessengerViewController.swift in Sources */,
+				8D5BA2D523CBFE45005D3615 /* NoticeViewController.swift in Sources */,
 				8D5BA2C923C6BBB6005D3615 /* HotTalentCollectionViewCell.swift in Sources */,
 				8B53006523827CC600DC62CB /* FMResultSet.m in Sources */,
+				8D5BA2D723CBFE54005D3615 /* QnAViewController.swift in Sources */,
 				8BF9C5EC2339AA2D00BE14FF /* SceneDelegate.swift in Sources */,
 				8B8430D2238E3D86003FF473 /* MessageListViewController.swift in Sources */,
 				8B53006823827CC600DC62CB /* FMDatabase.m in Sources */,
@@ -932,6 +965,9 @@
 				8BF9C74F2339FBEA00BE14FF /* FindViewController.swift in Sources */,
 				8B06085123713FAC002F1AAE /* MapViewController.swift in Sources */,
 				8BF9C7472339B51300BE14FF /* LoadingViewController.swift in Sources */,
+				8D5BA2D923CBFE5B005D3615 /* ClaimListViewController.swift in Sources */,
+				8D5BA2D323CBFE3A005D3615 /* NoticeListViewController.swift in Sources */,
+				8D5BA2DF23CC4745005D3615 /* ClaimListCell.swift in Sources */,
 				8B47B53F238F91D300398606 /* MessengerRecvCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
